@@ -87,6 +87,14 @@ L.Motion.Utils = {
         );
     },
 
+	distance: function(linePoints){
+		var distanceInMeter = 0;
+        for (var i = 1; i < linePoints.length; i++) {
+            distanceInMeter += linePoints[i].distanceTo(linePoints[i - 1]);
+        }
+
+        return distanceInMeter;
+	},
 
 	toLatLng: function(a, b, c) {
 		if (a instanceof L.LatLng) {
