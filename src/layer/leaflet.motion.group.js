@@ -15,21 +15,26 @@ L.Motion.Group = L.FeatureGroup.extend ({
 	startMotion: function () {
 		this.fire(L.Motion.Event.GroupStarted);
 		this.invoke("startMotion");
+		return this;
 	},
 	stopMotion: function () {
 		this.invoke("stopMotion");
 		this.fire(L.Motion.Event.GroupEnded);
+		return this;
 	},
 	pauseMotion: function () {
 		this.invoke("pauseMotion");
 		this.fire(L.Motion.Event.GroupPaused);
+		return this;
 	},
 	resumeMotion: function () {
 		this.invoke("resumeMotion");
 		this.fire(L.Motion.Event.GroupResumed);
+		return this;
 	},
 	toggleMotion: function () {
 		this.invoke("toggleMotion");
+		return this;
 	},
 });
 

@@ -106,7 +106,7 @@ L.Motion.Animate = {
 					angle += 360;
 				}
 
-				if (this.options.motionMarkerOnLine && !isNaN(+this.options.motionMarkerOnLine)) {
+				if (this.options.motionMarkerOnLine !== undefined && !isNaN(+this.options.motionMarkerOnLine)) {
 					this.options.motionMarkerOnLine = +this.options.motionMarkerOnLine;
 					m._icon.children[0].style.transform = "rotate(-" + Math.round(angle + this.options.motionMarkerOnLine) +"deg)";
 				}
@@ -126,6 +126,7 @@ L.Motion.Animate = {
     startMotion: function () {
 		if (!this.animation) {
 			this.fire(L.Motion.Event.Started, this);
+			this.setLatLngs([]);
 	        this._motion((new Date).getTime());
 		}
     },
@@ -143,14 +144,15 @@ L.Motion.Animate = {
 		if (this.animation) {
 			L.Util.cancelAnimFrame(this.animation);
 			this.animation = null;
+			this.fire(L.Motion.Event.Paused, this);
 		}
-
-		this.fire(L.Motion.Event.Paused, this);
 	},
 
 	resumeMotion: function () {
-		this._motion((new Date).getTime() - (this.__ellapsedTime || 0));
-		this.fire(L.Motion.Event.Resumed, this);
+		if (this.__ellapsedTime) {
+			this._motion((new Date).getTime() - (this.__ellapsedTime));
+			this.fire(L.Motion.Event.Resumed, this);
+		}
 	},
 
 	toggleMotion: function () {

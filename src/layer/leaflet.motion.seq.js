@@ -5,7 +5,14 @@
 
 L.Motion.Seq = L.Motion.Group.extend ({
     initialize: function (motion, options) {
-        L.Motion.Group.prototype.initialize.call(this, [motion], options);
+		var first = motion.length ? motion[0] : motion;
+        L.Motion.Group.prototype.initialize.call(this, [first], options);
+
+		if (motion.length) {
+			for (var i = 1; i < motion.length; i++) {
+				this.nextMotion(motion[i]);
+			}
+		}
     },
 
 	nextMotion: function(motion) {
@@ -31,6 +38,7 @@ L.Motion.Seq = L.Motion.Group.extend ({
 			this.fire(L.Motion.Event.SeqStarted, this);
 			layer.startMotion();
 		}
+		return this;
 	},
 
 	getFirstLayer: function() {
@@ -51,8 +59,5 @@ L.Motion.Seq = L.Motion.Group.extend ({
 });
 
 L.motion.seq = function(motion, options){
-	if (motion.length) {
-		motion = motion[0];
-	}
     return new L.Motion.Seq(motion, options);
 };

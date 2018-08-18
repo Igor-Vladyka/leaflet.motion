@@ -16,6 +16,10 @@
 				border: none!important;
 				color: white;
 			}
+
+			.red {
+				color: red!important;
+			}
         </style>
      </head>
 
@@ -42,7 +46,6 @@
 
 			var options = {
 		        draw: {
-		            polygon: false,
 		            circle: false, // Turns off this drawing tool
 		            rectangle: false,
 		            marker: false,
@@ -62,16 +65,21 @@
 		        }
 
 				if (type === "polyline") {
-					L.motion.polyline(L.motion.move.durationMove(layer.getLatLngs(), 5000), {
+					L.motion.polyline(layer.getLatLngs(), {
 						color: "orange",
-						auto: true
+						auto: true,
+						duration: 5000
 					}).addTo(map);
 				}
 
 				if (type === "polygon") {
 					L.motion.polygon(layer.getLatLngs(), {
 						color: "red",
-						auto: true
+						auto: true,
+						removeMarkerOnEnd: true,
+						markerOptions: {
+							icon: L.divIcon({className:"red", html: "<i class='fa fa-paint-brush fa-2x' aria-hidden='true'></i>", iconSize: L.point(24, 24), iconAnchor: L.point(5, 22)})
+						}
 					}).addTo(map);
 				}
 
@@ -111,7 +119,7 @@
 			});
 
 			var duration = 3000; // in ms === 3s
-			var options = {
+			var options0 = {
 				color: "white",
 				removeMarkerOnEnd: true,
 				markerOptions: {
@@ -119,10 +127,44 @@
 				}
 			};
 
-			var seqGroup = L.motion.seq(L.motion.move.durationMove([[50,0], [51,0]], duration, options))
-									.nextMotion(L.motion.move.durationMove([[51,0], [51,1]], duration, options))
-									.nextMotion(L.motion.move.durationMove([[51,1], [50,1]], duration, options))
-									.nextMotion(L.motion.move.durationMove([[50,1], [50,0]], duration, options)).addTo(map).startMotion();
+			var options3 = {
+				color: "white",
+				removeMarkerOnEnd: true,
+				markerOptions: {
+					icon: L.divIcon({html: "<i class='fa fa-car fa-2x' aria-hidden='true'></i>", iconSize: L.point(27.5, 24)})
+				}
+			};
+
+			var options2 = {
+				color: "white",
+				removeMarkerOnEnd: true,
+				motionMarkerOnLine: 0,
+				markerOptions: {
+					icon: L.divIcon({html: "<i class='fa fa-motorcycle fa-2x' aria-hidden='true'></i>", iconSize: L.point(22, 24)})
+				}
+			};
+
+
+			var options1 = {
+				color: "white",
+				removeMarkerOnEnd: true,
+				motionMarkerOnLine: 0,
+				markerOptions: {
+					icon: L.divIcon({html: "<i class='fa fa-bicycle fa-2x' aria-hidden='true'></i>", iconSize: L.point(22, 24)})
+				}
+			};
+			var seqGroup = L.motion.seq(L.motion.move.durationMove([[50,0], [51,0]], duration, options0))
+									.nextMotion(L.motion.move.durationMove([[51,0], [51,1]], duration, options1))
+									.nextMotion(L.motion.move.durationMove([[51,1], [50,1]], duration, options2))
+									.nextMotion(L.motion.move.durationMove([[50,1], [50,0]], duration, options3)).addTo(map).startMotion();
+
+			seqGroup.on("click", function(){
+				seqGroup.toggleMotion();
+			});
+
+			seqGroup.on("dblclick", function(){
+				seqGroup.startMotion();
+			});
     	</script>
     </body>
 
