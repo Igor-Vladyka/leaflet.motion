@@ -3,14 +3,28 @@
 	Author Igor Vladyka <igor.vladyka@gmail.com> (https://github.com/Igor-Vladyka/leaflet.motion)
 **/
 
-L.Motion = L.Motion || { Event: { Started:"started", Ended: "ended", Section: "section" } };
+L.Motion = L.Motion || {
+	Event: {
+			Started:"motion-started",
+			Paused: "motion-paused",
+			Section: "motion-section",
+			Ended: "motion-ended",
+			GroupStarted: "motion-group-stated",
+			GroupPaused: "motion-group-paused",
+			GroupEnded: "motion-group-ended",
+			SeqStarted: "motion-seq-stated",
+			SeqPaused: "motion-seq-paused",
+			SeqSection: "motion-seq-section",
+			SeqEnded: "motion-seq-ended",
+		}
+	};
 L.motion = L.motion || {};
 L.Motion.Animate = {
 	defaultOptions: {
 		pane: "polymotionPane",
 		attribution: "Leaflet.Motion © " + (new Date()).getFullYear() + " Igor Vladyka",
 		auto: false,
-		marker: null,
+		markerOptions: undefined,
 		easing: function(x){ return x; }, // linear
 		speed: 50, // KM/s
 		duration: 5000
@@ -39,17 +53,6 @@ L.Motion.Animate = {
         return this;
     },
 
-	drawMarker: function (nextPoint) {
-		var prevPoint = this.options.marker.getLatLng();
-		var angle = Math.atan2(nextPoint.lat - prevPoint.lat, nextPoint.lng - prevPoint.lng) * 180 / Math.PI;
-		if (angle < 0) {
-	        angle += 360;
-	    }
-
-		this.options.marker._icon.children[0].style.transform = "rotate(-" + Math.round(angle - 45) +"deg)"
-		this.options.marker.setLatLng(nextPoint);
-	},
-
 	/**
         @param {Map} map the Leaflet Map
     */
@@ -61,7 +64,7 @@ L.Motion.Animate = {
 	/**
         @param {DateTime} startTime time from start animation
     */
-    _motion: function (startTime, duration) {
+    _motion: function (startTime, intialDuration, duration) {
 		var ellapsedTime = (new Date()).getTime() - startTime;
         var durationRatio = ellapsedTime / duration; // 0 - 1
 		durationRatio = this.options.easing(durationRatio, ellapsedTime, 0, 1, duration);
@@ -69,27 +72,66 @@ L.Motion.Animate = {
 		var nextPoint = L.Motion.Utils.interpolateOnLine(this._map, this._linePoints, durationRatio);
 
 		this.addLatLng(nextPoint.latLng);
+		this._drawMarker(nextPoint.latLng);
 
 		if (durationRatio < 1) {
 			this.animation = L.Util.requestAnimFrame(function(){
-				this._motion(startTime, duration);
+				this._motion(startTime, intialDuration, duration);
 			}, this);
 		} else {
-			this.setLatLngs(this._linePoints);
-			this.stopMotion();
+			this.stopMotion(this._linePoints);
 		}
     },
+
+	/**
+        @param {LatLng} nextPoint next animation point
+    */
+	_drawMarker: function (nextPoint) {
+		var mo = this.options.markerOptions;
+		if (mo) {
+			if (!this.__marker) {
+				mo.pane = this.options.pane;
+				mo.attribution = this.options.attribution;
+				this.__marker = L.marker(nextPoint, mo);
+				this.__marker.addTo(this._map);
+				this.__marker.addEventParent(this);
+			} else {
+				var m = this.__marker;
+				var prevPoint = m.getLatLng();
+				var angle = Math.atan2(nextPoint.lat - prevPoint.lat, nextPoint.lng - prevPoint.lng) * 180 / Math.PI;
+				if (angle < 0) {
+					angle += 360;
+				}
+
+				if (this.options.motionMarkerOnLine && !isNaN(+this.options.motionMarkerOnLine)) {
+					this.options.motionMarkerOnLine = +this.options.motionMarkerOnLine;
+					m._icon.children[0].style.transform = "rotate(-" + Math.round(angle + this.options.motionMarkerOnLine) +"deg)";
+				}
+
+				m.setLatLng(nextPoint);
+			}
+		}
+	},
+
+	_validateMarker: function () {
+		if (this.options.removeMarkerOnEnd && this.__marker) {
+			this.__marker.remove();
+			this.__marker = null;
+		}
+	},
 
     startMotion: function () {
 		if (!this.animation) {
 			this.fire(L.Motion.Event.Started, this);
-	        this._motion((new Date).getTime(), this.options.duration);
+	        this._motion((new Date).getTime(), 0, this.options.duration);
 		}
     },
 
-    stopMotion: function () {
+    stopMotion: function (points) {
+		points = points || [];
 		this.pauseMotion();
-		this.setLatLngs([]);
+		this.setLatLngs(points);
+		this._validateMarker();
 		this.fire(L.Motion.Event.Ended, this);
     },
 
@@ -98,20 +140,15 @@ L.Motion.Animate = {
 			L.Util.cancelAnimFrame(this.animation);
 			this.animation = null;
 		}
+
+		this.fire(L.Motion.Event.Paused, this);
 	},
 
 	resumeMotion: function () {
 		// TODO: implement resume from last point;
-	},
-
-	/**
-        @param {String} property property to reduce on
-        @return {Number} calculated reduced value
-    */
-	__reducer: function (property) {
-		return function(accumulative, object) {
-			return accumulative + object[property];
-		};
+		throw "resumeMotion is not implemented yet";
+		this.fire(L.Motion.Event.Resumed, this);
+		this._motion((new Date).getTime(), 0, this.options.duration);
 	},
 
 	/**

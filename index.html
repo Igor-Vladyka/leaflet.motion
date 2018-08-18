@@ -8,8 +8,14 @@
 
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"/>
 		<link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/src/leaflet.draw.css"/>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
         <style>
             html, body, #map { width: 100%; height: 100%; margin: 0px; padding: 0px;}
+			.leaflet-div-icon {
+				background: transparent!important;
+				border: none!important;
+				color: white;
+			}
         </style>
      </head>
 
@@ -23,6 +29,7 @@
 		<script src="src/layer/leaflet.motion.polyline.js"></script>
 		<script src="src/layer/leaflet.motion.polygon.js"></script>
 		<script src="src/layer/leaflet.motion.group.js"></script>
+		<script src="src/layer/leaflet.motion.seq.js"></script>
 		<script src="src/leaflet.motion.move.js"></script>
 		<script src="src/leaflet.motion.utils.js"></script>
 		<div id="map"></div>
@@ -73,26 +80,51 @@
 
 			var greenLine = [[51,3], [51,1]];
 			var motionGroup = L.motion.group(
-					[L.motion.move.durationMove([[51,1], [52,2]], 5000, {
-						color: "orange"
+					[L.motion.move.durationMove([[52,1], [51,1]], 5000, {
+						color: "transparent",
+						dashArray: "10 5 5",
+						markerOptions: {
+							icon: L.divIcon({html: "<i class='fa fa-snowflake-o fa-spin fa-2x' aria-hidden='true'></i>", iconSize: L.point(22, 24)})
+						}
 					}),
-					L.motion.move.durationMove([[52,2], [51,3]], 3000, {
-						color: "red"
+					L.motion.move.durationMove([[52,3], [51,3]], 3000, {
+						color: "red",
+						markerOptions: {
+							icon: L.divIcon({html: "<i class='fa fa-car fa-2x' aria-hidden='true'></i>", iconSize: L.point(27.5, 24)})
+						}
 					}),
-					L.motion.move.durationMove([[51,3], [51,1]], L.Motion.Animate.getDuration(greenLine, 10), {
-						color: "green"
+					L.motion.move.durationMove([[52,2], [51,2]], L.Motion.Animate.getDuration(greenLine, 30), {
+						color: "white",
+						dashArray: "10 5 5",
+						motionMarkerOnLine: -45, // To position it north
+						markerOptions: {
+							icon: L.divIcon({html: "<i class='fa fa-plug fa-2x' aria-hidden='true'></i>", iconSize: L.point(24, 24)})
+						}
 					})
 				]
 			).addTo(map);
 
 			setTimeout(function(){
-				motionGroup.startSeq();
-			}, 3000);
+				motionGroup.startAll();
+			}, 1000);
 
 			motionGroup.on("click", function(){
-				motionGroup.stopAll();
-				motionGroup.startAll();
+				motionGroup.pauseAll();
 			});
+
+			var duration = 3000; // in ms === 3s
+			var options = {
+				color: "white",
+				removeMarkerOnEnd: true,
+				markerOptions: {
+					icon: L.divIcon({html: "<i class='fa fa-snowflake-o fa-spin fa-2x' aria-hidden='true'></i>", iconSize: L.point(22, 24)})
+				}
+			};
+
+			var seqGroup = L.motion.seq(L.motion.move.durationMove([[50,0], [51,0]], duration, options))
+									.nextMotion(L.motion.move.durationMove([[51,0], [51,1]], duration, options))
+									.nextMotion(L.motion.move.durationMove([[51,1], [50,1]], duration, options))
+									.nextMotion(L.motion.move.durationMove([[50,1], [50,0]], duration, options)).addTo(map).startSeq();
     	</script>
     </body>
 
