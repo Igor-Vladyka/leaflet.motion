@@ -7,13 +7,16 @@ L.Motion = L.Motion || {
 	Event: {
 			Started:"motion-started",
 			Paused: "motion-paused",
+			Resumed: "motion-resumed",
 			Section: "motion-section",
 			Ended: "motion-ended",
 			GroupStarted: "motion-group-stated",
 			GroupPaused: "motion-group-paused",
+			GroupResumed: "motion-group-resumed",
 			GroupEnded: "motion-group-ended",
 			SeqStarted: "motion-seq-stated",
 			SeqPaused: "motion-seq-paused",
+			SeqResumed: "motion-group-resumed",
 			SeqSection: "motion-seq-section",
 			SeqEnded: "motion-seq-ended",
 		}
@@ -64,10 +67,10 @@ L.Motion.Animate = {
 	/**
         @param {DateTime} startTime time from start animation
     */
-    _motion: function (startTime, intialDuration, duration) {
+    _motion: function (startTime) {
 		var ellapsedTime = (new Date()).getTime() - startTime;
-        var durationRatio = ellapsedTime / duration; // 0 - 1
-		durationRatio = this.options.easing(durationRatio, ellapsedTime, 0, 1, duration);
+        var durationRatio = ellapsedTime / this.options.duration; // 0 - 1
+		durationRatio = this.options.easing(durationRatio, ellapsedTime, 0, 1, this.options.duration);
 
 		var nextPoint = L.Motion.Utils.interpolateOnLine(this._map, this._linePoints, durationRatio);
 
@@ -75,8 +78,9 @@ L.Motion.Animate = {
 		this._drawMarker(nextPoint.latLng);
 
 		if (durationRatio < 1) {
+			this.__ellapsedTime = ellapsedTime;
 			this.animation = L.Util.requestAnimFrame(function(){
-				this._motion(startTime, intialDuration, duration);
+				this._motion(startTime);
 			}, this);
 		} else {
 			this.stopMotion(this._linePoints);
@@ -90,7 +94,6 @@ L.Motion.Animate = {
 		var mo = this.options.markerOptions;
 		if (mo) {
 			if (!this.__marker) {
-				mo.pane = this.options.pane;
 				mo.attribution = this.options.attribution;
 				this.__marker = L.marker(nextPoint, mo);
 				this.__marker.addTo(this._map);
@@ -123,7 +126,7 @@ L.Motion.Animate = {
     startMotion: function () {
 		if (!this.animation) {
 			this.fire(L.Motion.Event.Started, this);
-	        this._motion((new Date).getTime(), 0, this.options.duration);
+	        this._motion((new Date).getTime());
 		}
     },
 
@@ -132,6 +135,7 @@ L.Motion.Animate = {
 		this.pauseMotion();
 		this.setLatLngs(points);
 		this._validateMarker();
+		this.__ellapsedTime = null;
 		this.fire(L.Motion.Event.Ended, this);
     },
 
@@ -145,10 +149,16 @@ L.Motion.Animate = {
 	},
 
 	resumeMotion: function () {
-		// TODO: implement resume from last point;
-		throw "resumeMotion is not implemented yet";
+		this._motion((new Date).getTime() - (this.__ellapsedTime || 0));
 		this.fire(L.Motion.Event.Resumed, this);
-		this._motion((new Date).getTime(), 0, this.options.duration);
+	},
+
+	toggleMotion: function () {
+		if (this.animation) {
+			this.pauseMotion();
+		} else {
+			this.resumeMotion();
+		}
 	},
 
 	/**

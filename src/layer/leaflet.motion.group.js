@@ -12,18 +12,25 @@ L.Motion.Group = L.FeatureGroup.extend ({
 		var items =  motionMoves.map(function(f){ return L.motion.polyline(f.points, f.options); });
         L.FeatureGroup.prototype.initialize.call(this, items, options);
     },
-	startAll: function () {
+	startMotion: function () {
 		this.fire(L.Motion.Event.GroupStarted);
 		this.invoke("startMotion");
 	},
-	stopAll: function () {
+	stopMotion: function () {
 		this.invoke("stopMotion");
 		this.fire(L.Motion.Event.GroupEnded);
 	},
-	pauseAll: function () {
+	pauseMotion: function () {
 		this.invoke("pauseMotion");
 		this.fire(L.Motion.Event.GroupPaused);
-	}
+	},
+	resumeMotion: function () {
+		this.invoke("resumeMotion");
+		this.fire(L.Motion.Event.GroupResumed);
+	},
+	toggleMotion: function () {
+		this.invoke("toggleMotion");
+	},
 });
 
 L.motion.group = function(motionMove, options){

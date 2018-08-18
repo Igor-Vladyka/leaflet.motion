@@ -20,12 +20,15 @@ L.Motion.Seq = L.Motion.Group.extend ({
 			this._setupDelay(prevMotion, motion)
 		}
 
+		motion.on(L.Motion.Event.SeqSection, this);
+
 		return this;
 	},
 
-	startSeq: function () {
+	startMotion: function () {
 		var layer = this.getFirstLayer();
 		if (layer) {
+			this.fire(L.Motion.Event.SeqStarted, this);
 			layer.startMotion();
 		}
 	},
