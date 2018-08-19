@@ -28,14 +28,15 @@
 		<script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet-src.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
 
-		<script src="src/leaflet.motion.js"></script>
+		<!--script src="src/leaflet.motion.js"></script>
+		<script src="src/leaflet.motion.move.js"></script>
+		<script src="src/leaflet.motion.utils.js"></script>
 		<script src="src/leaflet.motion.easing.js"></script>
 		<script src="src/layer/leaflet.motion.polyline.js"></script>
 		<script src="src/layer/leaflet.motion.polygon.js"></script>
 		<script src="src/layer/leaflet.motion.group.js"></script>
-		<script src="src/layer/leaflet.motion.seq.js"></script>
-		<script src="src/leaflet.motion.move.js"></script>
-		<script src="src/leaflet.motion.utils.js"></script>
+		<script src="src/layer/leaflet.motion.seq.js"></script-->
+		<script src="dist/leaflet.motion.js"></script>
 		<div id="map"></div>
     	<script>
 			var map = L.map("map").setView([51, 1], 8);
@@ -65,10 +66,12 @@
 		        }
 
 				if (type === "polyline") {
-					L.motion.polyline(layer.getLatLngs(), {
+					var speedMove = L.motion.move.speedMove(layer.getLatLngs(), 100000);
+					L.motion.polyline(speedMove.points, {
 						color: "orange",
 						auto: true,
-						duration: 5000
+						easing: L.Motion.Ease.easeInOutBounce,
+						duration: speedMove.options.duration
 					}).addTo(map);
 				}
 
@@ -99,7 +102,7 @@
 							icon: L.divIcon({html: "<i class='fa fa-car fa-2x' aria-hidden='true'></i>", iconSize: L.point(27.5, 24)})
 						}
 					}),
-					L.motion.move.durationMove([[52,2], [51,2]], L.Motion.Animate.getDuration(greenLine, 30), {
+					L.motion.move.speedMove([[52,2], [51,2]], 3000, {
 						color: "white",
 						dashArray: "10 5 5",
 						motionMarkerOnLine: -45, // To position it north
@@ -122,6 +125,7 @@
 			var options0 = {
 				color: "white",
 				removeMarkerOnEnd: true,
+				easing: L.Motion.Ease.easeInOutQuad,
 				markerOptions: {
 					icon: L.divIcon({html: "<i class='fa fa-snowflake-o fa-spin fa-2x' aria-hidden='true'></i>", iconSize: L.point(22, 24)})
 				}
@@ -149,6 +153,8 @@
 				color: "white",
 				removeMarkerOnEnd: true,
 				motionMarkerOnLine: 0,
+				easing: L.Motion.Ease.easeInOutQuart,
+				debug: true,
 				markerOptions: {
 					icon: L.divIcon({html: "<i class='fa fa-bicycle fa-2x' aria-hidden='true'></i>", iconSize: L.point(22, 24)})
 				}

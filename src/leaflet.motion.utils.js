@@ -96,6 +96,19 @@ L.Motion.Utils = {
         return distanceInMeter;
 	},
 
+	/**
+        @param {LatLng[]} collection of coordinates
+        @param {Number} speed in KM/s
+        @return {Number} duration
+    */
+	getDuration: function (collection, speed) {
+		speed = speed || this.options.speed || this.defaultOptions.speed;
+		collection = collection || this._linePoints;
+		collection = collection.map(function(m){ return L.Motion.Utils.toLatLng(m); })
+		var distance = L.Motion.Utils.distance(collection);
+		return distance/(speed/3600);
+	},
+
 	toLatLng: function(a, b, c) {
 		if (a instanceof L.LatLng) {
 			return a;

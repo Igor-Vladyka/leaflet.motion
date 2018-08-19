@@ -14,18 +14,14 @@ L.Motion.Move = function (points, options) {
 
 L.motion.move = function (points, options) {
 	return new L.Motion.Move(points, options);
-}
-
-L.motion.move.speedMove = function (points, speed, options) {
-	var dist = L.Motion.Utils.distance(points); // Distance in meters;
-	speed = speed || 50;
-	options = options || {};
-	options.duration = dist/speed;
-	return L.motion.move(points, options)
 };
 
 L.motion.move.durationMove = function (points, duration, options) {
 	options = options || {};
 	options.duration = duration;
 	return L.motion.move(points, options)
+};
+
+L.motion.move.speedMove = function (points, speed, options) {
+	return L.motion.move.durationMove(points, L.Motion.Utils.getDuration(points, speed), options)
 };

@@ -9,10 +9,12 @@ var banner = '\n ' + PACKAGE.name + ' - v' + PACKAGE.version + ' (' + PACKAGE.ho
 var pluginFiles = [
 	'./src/leaflet.motion.js',
 	'./src/leaflet.motion.move.js',
-	'./src/leaflet.motion.easing.js',
 	'./src/leaflet.motion.utils.js',
+	'./src/leaflet.motion.easing.js',
 	'./src/layer/leaflet.motion.polyline.js',
-	'./src/layer/leaflet.motion.polygon.js'
+	'./src/layer/leaflet.motion.polygon.js',
+	'./src/layer/leaflet.motion.group.js',
+	'./src/layer/leaflet.motion.seq.js'
 ];
 
 module.exports = [

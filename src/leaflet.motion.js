@@ -29,8 +29,8 @@ L.Motion.Animate = {
 		auto: false,
 		markerOptions: undefined,
 		easing: function(x){ return x; }, // linear
-		speed: 50, // KM/s
-		duration: 5000
+		speed: 60, // KM/H
+		duration: 0
 	},
 
 	/**
@@ -70,14 +70,14 @@ L.Motion.Animate = {
     _motion: function (startTime) {
 		var ellapsedTime = (new Date()).getTime() - startTime;
         var durationRatio = ellapsedTime / this.options.duration; // 0 - 1
-		durationRatio = this.options.easing(durationRatio, ellapsedTime, 0, 1, this.options.duration);
-
-		var nextPoint = L.Motion.Utils.interpolateOnLine(this._map, this._linePoints, durationRatio);
-
-		this.addLatLng(nextPoint.latLng);
-		this._drawMarker(nextPoint.latLng);
 
 		if (durationRatio < 1) {
+			durationRatio = this.options.easing(durationRatio, ellapsedTime, 0, 1, this.options.duration);
+			var nextPoint = L.Motion.Utils.interpolateOnLine(this._map, this._linePoints, durationRatio);
+
+			this.addLatLng(nextPoint.latLng);
+			this._drawMarker(nextPoint.latLng);
+
 			this.__ellapsedTime = ellapsedTime;
 			this.animation = L.Util.requestAnimFrame(function(){
 				this._motion(startTime);
@@ -161,18 +161,5 @@ L.Motion.Animate = {
 		} else {
 			this.resumeMotion();
 		}
-	},
-
-	/**
-        @param {LatLng[]} collection of coordinates
-        @param {Number} speed in KM/s
-        @return {Number} duration
-    */
-	getDuration: function (collection, speed) {
-		speed = speed || this.options.speed || this.defaultOptions.speed;
-		collection = collection || this._linePoints;
-		collection = collection.map(function(m){ return L.Motion.Utils.toLatLng(m); })
-		var distance = L.Motion.Utils.distance(collection);
-		return distance/speed;
 	}
 }
