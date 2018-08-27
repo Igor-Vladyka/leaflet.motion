@@ -12,7 +12,7 @@ var pluginFiles = [
 	'./src/leaflet.motion.utils.js',
 	'./src/leaflet.motion.easing.js',
 	'./src/layer/leaflet.motion.polyline.js',
-	'./src/layer/leaflet.motion.polygon.js',
+	//'./src/layer/leaflet.motion.polygon.js',
 	'./src/layer/leaflet.motion.group.js',
 	'./src/layer/leaflet.motion.seq.js'
 ];

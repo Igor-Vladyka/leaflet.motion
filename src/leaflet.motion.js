@@ -9,18 +9,10 @@ L.Motion = L.Motion || {
 			Paused: "motion-paused",
 			Resumed: "motion-resumed",
 			Section: "motion-section",
-			Ended: "motion-ended",
-			GroupStarted: "motion-group-stated",
-			GroupPaused: "motion-group-paused",
-			GroupResumed: "motion-group-resumed",
-			GroupEnded: "motion-group-ended",
-			SeqStarted: "motion-seq-stated",
-			SeqPaused: "motion-seq-paused",
-			SeqResumed: "motion-group-resumed",
-			SeqSection: "motion-seq-section",
-			SeqEnded: "motion-seq-ended",
+			Ended: "motion-ended"
 		}
 	};
+
 L.motion = L.motion || {};
 L.Motion.Animate = {
 	defaultOptions: {
@@ -28,6 +20,7 @@ L.Motion.Animate = {
 		attribution: "Leaflet.Motion © " + (new Date()).getFullYear() + " Igor Vladyka",
 		auto: false,
 		markerOptions: undefined,
+		rotateMarker: false,
 		easing: function(x){ return x; }, // linear
 		speed: 60, // KM/H
 		duration: 0
@@ -46,6 +39,7 @@ L.Motion.Animate = {
 
 	/**
         @param {Map} map the Leaflet Map
+		@return {MotionObject} this
     */
     onAdd: function (map) {
         L.Polyline.prototype.onAdd.call(this, map);
@@ -88,6 +82,7 @@ L.Motion.Animate = {
     },
 
 	/**
+		Draws marker according to line position
         @param {LatLng} nextPoint next animation point
     */
 	_drawMarker: function (nextPoint) {
@@ -106,9 +101,14 @@ L.Motion.Animate = {
 					angle += 360;
 				}
 
-				if (this.options.motionMarkerOnLine !== undefined && !isNaN(+this.options.motionMarkerOnLine)) {
-					this.options.motionMarkerOnLine = +this.options.motionMarkerOnLine;
-					m._icon.children[0].style.transform = "rotate(-" + Math.round(angle + this.options.motionMarkerOnLine) +"deg)";
+				if (this.options.rotateMarker) {
+					var motionMarkerOnLine = 0;
+					var baseAttributeValue = m._icon.children[0].getAttribute("motion-base");
+					if (baseAttributeValue && !isNaN(+baseAttributeValue)) {
+						motionMarkerOnLine = +baseAttributeValue;
+					}
+
+					m._icon.children[0].style.transform = "rotate(-" + Math.round(angle + motionMarkerOnLine) +"deg)";
 				}
 
 				m.setLatLng(nextPoint);
@@ -116,50 +116,87 @@ L.Motion.Animate = {
 		}
 	},
 
-	_validateMarker: function () {
+	/**
+        Removes marker from the map
+    */
+	_removeMarker: function () {
 		if (this.options.removeMarkerOnEnd && this.__marker) {
 			this.__marker.remove();
 			this.__marker = null;
 		}
 	},
 
-    startMotion: function () {
+	/**
+        Starts animation of current object
+        @param {LatLng[]} points initial points to show on the map on starting animation
+    */
+    startMotion: function (points) {
 		if (!this.animation) {
-			this.fire(L.Motion.Event.Started, this);
+			points = points || [];
 			this.setLatLngs([]);
 	        this._motion((new Date).getTime());
+			this.fire(L.Motion.Event.Started, {layer: this}, false);
 		}
+
+		return this;
     },
 
+	/**
+        Stops animation of current object
+        @param {LatLng[]} points full object points collection or empty collection for cleanup
+    */
     stopMotion: function (points) {
 		points = points || [];
 		this.pauseMotion();
 		this.setLatLngs(points);
-		this._validateMarker();
+		this._removeMarker();
 		this.__ellapsedTime = null;
-		this.fire(L.Motion.Event.Ended, this);
+		this.fire(L.Motion.Event.Ended, {layer: this}, false);
+
+		return this;
     },
 
+	/**
+        Pauses animation of current object
+    */
 	pauseMotion: function () {
 		if (this.animation) {
 			L.Util.cancelAnimFrame(this.animation);
 			this.animation = null;
-			this.fire(L.Motion.Event.Paused, this);
+			this.fire(L.Motion.Event.Paused, {layer: this}, false);
 		}
+
+		return this;
 	},
 
+	/**
+        Resume animation of current object
+    */
 	resumeMotion: function () {
-		if (this.__ellapsedTime) {
+		if (!this.animation && this.__ellapsedTime) {
 			this._motion((new Date).getTime() - (this.__ellapsedTime));
-			this.fire(L.Motion.Event.Resumed, this);
+			this.fire(L.Motion.Event.Resumed, {layer: this}, false);
 		}
+
+		return this;
 	},
 
+	/**
+        Toggles animation of current object; Start/Pause/Resume;
+    */
 	toggleMotion: function () {
 		if (this.animation) {
-			this.pauseMotion();
+			if (this.__ellapsedTime) {
+				this.pauseMotion();
+			}
 		} else {
-			this.resumeMotion();
+			if (this.__ellapsedTime) {
+				this.resumeMotion();
+			} else {
+				this.startMotion();
+			}
 		}
+
+		return this;
 	}
 }

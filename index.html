@@ -48,6 +48,7 @@
 			var options = {
 		        draw: {
 		            circle: false, // Turns off this drawing tool
+					polygon: false,
 		            rectangle: false,
 		            marker: false,
 					circlemarker: false
@@ -89,38 +90,6 @@
 				//map.addLayer(layer);
 		    });
 
-			var greenLine = [[51,3], [51,1]];
-			var motionGroup = L.motion.group(
-					[L.motion.move.durationMove([[52,1], [51,1]], 5000, {
-						color: "transparent",
-						dashArray: "10 5 5",
-						markerOptions: {}
-					}),
-					L.motion.move.durationMove([[52,3], [51,3]], 3000, {
-						color: "red",
-						markerOptions: {
-							icon: L.divIcon({html: "<i class='fa fa-car fa-2x' aria-hidden='true'></i>", iconSize: L.point(27.5, 24)})
-						}
-					}),
-					L.motion.move.speedMove([[52,2], [51,2]], 3000, {
-						color: "white",
-						dashArray: "10 5 5",
-						motionMarkerOnLine: -45, // To position it north
-						markerOptions: {
-							icon: L.divIcon({html: "<i class='fa fa-plug fa-2x' aria-hidden='true'></i>", iconSize: L.point(24, 24)})
-						}
-					})
-				]
-			).addTo(map);
-
-			setTimeout(function(){
-				motionGroup.startMotion();
-			}, 1000);
-
-			motionGroup.on("click", function(){
-				motionGroup.toggleMotion();
-			});
-
 			var duration = 3000; // in ms === 3s
 			var options0 = {
 				color: "white",
@@ -142,9 +111,9 @@
 			var options2 = {
 				color: "white",
 				removeMarkerOnEnd: true,
-				motionMarkerOnLine: 0,
+				rotateMarker: true, // To position it north
 				markerOptions: {
-					icon: L.divIcon({html: "<i class='fa fa-motorcycle fa-2x' aria-hidden='true'></i>", iconSize: L.point(22, 24)})
+					icon: L.divIcon({html: "<i class='fa fa-motorcycle fa-2x' aria-hidden='true' motion-base='0'></i>", iconSize: L.point(22, 24)})
 				}
 			};
 
@@ -152,25 +121,59 @@
 			var options1 = {
 				color: "white",
 				removeMarkerOnEnd: true,
-				motionMarkerOnLine: 0,
+				rotateMarker: true, // To position it north
 				easing: L.Motion.Ease.easeInOutQuart,
 				debug: true,
 				markerOptions: {
-					icon: L.divIcon({html: "<i class='fa fa-bicycle fa-2x' aria-hidden='true'></i>", iconSize: L.point(22, 24)})
+					icon: L.divIcon({html: "<i class='fa fa-bicycle fa-2x' aria-hidden='true' motion-base='0'></i>", iconSize: L.point(22, 24)})
 				}
 			};
-			var seqGroup = L.motion.seq(L.motion.move.durationMove([[50,0], [51,0]], duration, options0))
-									.nextMotion(L.motion.move.durationMove([[51,0], [51,1]], duration, options1))
-									.nextMotion(L.motion.move.durationMove([[51,1], [50,1]], duration, options2))
-									.nextMotion(L.motion.move.durationMove([[50,1], [50,0]], duration, options3)).addTo(map).startMotion();
+
+			function getMotionLine(move){
+				return L.motion.polyline(move.points, move.options);
+			}
+
+			var seqGroup = L.motion.seq([
+				getMotionLine(L.motion.move.durationMove([[50,0], [51,0]], duration, options0)),
+				getMotionLine(L.motion.move.durationMove([[51,0], [51,1]], duration, options1)),
+				getMotionLine(L.motion.move.durationMove([[51,1], [50,1]], duration, options2)),
+				getMotionLine(L.motion.move.durationMove([[50,1], [50,0]], duration, options3))]).addTo(map).startMotion();
 
 			seqGroup.on("click", function(){
-				seqGroup.toggleMotion();
+				seqGroup.pauseMotion();
 			});
 
 			seqGroup.on("dblclick", function(){
 				seqGroup.startMotion();
 			});
+
+			var greenLine = [[51,3], [51,1]];
+			var motionGroup = L.motion.group(
+					[getMotionLine(L.motion.move.durationMove([[52,1], [51,1]], 5000, {
+						color: "transparent",
+						dashArray: "10 5 5",
+						markerOptions: {}
+					})),
+					getMotionLine(L.motion.move.durationMove([[52,3], [51,3]], 3000, {
+						color: "red",
+						markerOptions: {
+							icon: L.divIcon({html: "<i class='fa fa-car fa-2x' aria-hidden='true'></i>", iconSize: L.point(27.5, 24)})
+						}
+					})),
+					getMotionLine(L.motion.move.speedMove([[52,2], [51,2]], 3000, {
+						color: "white",
+						dashArray: "10 5 5",
+						rotateMarker: true, // To position it north
+						markerOptions: {
+							icon: L.divIcon({html: "<i class='fa fa-plug fa-2x' aria-hidden='true' motion-base='-45'></i>", iconSize: L.point(24, 24)})
+						}
+					}))
+				]
+			).addTo(map);
+
+			setTimeout(function(){
+				motionGroup.startMotion();
+			}, 1000);
     	</script>
     </body>
 

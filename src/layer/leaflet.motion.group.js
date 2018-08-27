@@ -8,36 +8,52 @@ L.Motion.Group = L.FeatureGroup.extend ({
 		pane: L.Motion.Animate.defaultOptions.pane,
 		attribution: L.Motion.Animate.defaultOptions.attribution,
 	},
-    initialize: function (motionMoves, options) {
-		var items =  motionMoves.map(function(f){ return L.motion.polyline(f.points, f.options); });
-        L.FeatureGroup.prototype.initialize.call(this, items, options);
-    },
+
+	/**
+		Starts all motions in current group;
+	*/
 	startMotion: function () {
-		this.fire(L.Motion.Event.GroupStarted);
 		this.invoke("startMotion");
+		this.fire(L.Motion.Event.Started, {layer: this}, false);
 		return this;
 	},
+
+	/**
+		Stops all motions in current group;
+	*/
 	stopMotion: function () {
 		this.invoke("stopMotion");
-		this.fire(L.Motion.Event.GroupEnded);
+		this.fire(L.Motion.Event.Ended, {layer: this}, false);
 		return this;
 	},
+
+	/**
+		Pauses all motions in current group;
+	*/
 	pauseMotion: function () {
 		this.invoke("pauseMotion");
-		this.fire(L.Motion.Event.GroupPaused);
+		this.fire(L.Motion.Event.Paused, {layer: this}, false);
 		return this;
 	},
+
+	/**
+		Reset all motions in current group;
+	*/
 	resumeMotion: function () {
 		this.invoke("resumeMotion");
-		this.fire(L.Motion.Event.GroupResumed);
+		this.fire(L.Motion.Event.Resumed, {layer: this}, false);
 		return this;
 	},
+
+	/**
+		Reset all motions in current group;
+	*/
 	toggleMotion: function () {
 		this.invoke("toggleMotion");
 		return this;
-	},
+	}
 });
 
-L.motion.group = function(motionMove, options){
-    return new L.Motion.Group(motionMove, options);
+L.motion.group = function(motions, options){
+    return new L.Motion.Group(motions, options);
 };
