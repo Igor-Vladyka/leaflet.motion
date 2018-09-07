@@ -55,6 +55,9 @@ L.Motion.Animate = {
     */
 	onRemove: function (map) {
 		this.stopMotion();
+		if (this.__marker) {
+			map.removeLayer(this.__marker);
+		}
         L.Polyline.prototype.onRemove.call(this, map);
 	},
 
