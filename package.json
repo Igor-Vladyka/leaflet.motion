@@ -1,6 +1,6 @@
 {
   "name": "leaflet.motion",
-  "version": "0.0.7",
+  "version": "0.0.5",
   "keywords": [
     "leaflet.js",
     "browser",
@@ -9,7 +9,7 @@
     "animation",
 	"line animation"
   ],
-  "description": "Leaflet plugin that allow to animate line leaflet map objects",
+  "description": "Animation plugin for Leaflet.js",
   "homepage": "https://github.com/Igor-Vladyka/leaflet.motion#readme",
   "bugs": "https://github.com/Igor-Vladyka/leaflet.motion/issues",
   "repository": {

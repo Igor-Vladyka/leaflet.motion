@@ -1,7 +1,7 @@
 /*!
  * 
- *  leaflet.motion - v0.0.7 (https://github.com/Igor-Vladyka/leaflet.motion#readme) 
- *  Leaflet plugin that allow to animate line leaflet map objects
+ *  leaflet.motion - v0.0.5 (https://github.com/Igor-Vladyka/leaflet.motion#readme) 
+ *  Animation plugin for Leaflet.js
  *  
  *  MIT (http://www.opensource.org/licenses/mit-license.php)
  *  (c) 2018  Igor Vladyka <igor.vladyka@gmail.com> (https://github.com/Igor-Vladyka/)

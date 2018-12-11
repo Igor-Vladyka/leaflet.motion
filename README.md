@@ -1,6 +1,9 @@
-## leaflet.js layers animation plugin
+# Animation Plugin for Leaflet.js
+[![npm version](https://badge.fury.io/js/leaflet.motion.svg)](https://www.npmjs.com/package/leaflet.motion)
 
-A [leaflet](http://www.leafletjs.com) plugin which allows users to apply animation [DEMO](https://igor-vladyka.github.io/leaflet.motion/)
+## General information
+
+A [leaflet](http://www.leafletjs.com) plugin which allows users to [apply animation](https://igor-vladyka.github.io/leaflet.motion/).
 
 ### Downloads
 **NPM**
@@ -34,14 +37,14 @@ You can pass a number of options to the plugin to control various settings.
 
 | Option        | Type         | Default      | Description   |
 | ------------- |--------------|--------------|---------------|
-| pane    		| [Pane](https://leafletjs.com/reference-1.3.0.html#map-pane) | 'polymotionPane' 	  | Default pane |
+| pane    		| [Pane](https://leafletjs.com/reference-1.3.4.html#map-pane) | 'polymotionPane' 	  | Default pane |
 | auto     		| Boolean      | false  	  | Indicates auto start animation on plugin added to the map |
 | easing    	| [L.Motion.Ease](https://github.com/Igor-Vladyka/leaflet.motion/blob/master/src/leaflet.motion.easing.js)| L.Motion.Ease.linear | Animation strategy |
 | speed    		| Number | 50 	  | Motion speed in KM/H |
 | duration    	| Number | 0  | Motion duration in ms, 0 means no animation |
 | removeMarkerOnEnd	| Boolean | false  | Removes marker from map on motion end |
 | motionMarkerOnLine| Number | 0  | Angle in degree to align marker north |
-| markerOptions	| [MarkerOptions](https://leafletjs.com/reference-1.3.0.html#marker-option) | null  | When present, marker will be created with specified options |
+| markerOptions	| [MarkerOptions](https://leafletjs.com/reference-1.3.4.html#marker-option) | null  | When present, marker will be created with specified options |
 
 Here's an example of passing through some options:
 ``` js
