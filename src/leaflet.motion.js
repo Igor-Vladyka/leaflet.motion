@@ -15,15 +15,37 @@ L.Motion = L.Motion || {
 
 L.motion = L.motion || {};
 L.Motion.Animate = {
-	defaultOptions: {
+	options: {
 		pane: "polymotionPane",
-		attribution: "Leaflet.Motion © " + (new Date()).getFullYear() + " Igor Vladyka",
+		attribution: "Leaflet.Motion © " + (new Date()).getFullYear() + " Igor Vladyka"
+	},
+
+	motionOptions: {
 		auto: false,
-		markerOptions: undefined,
-		rotateMarker: false,
 		easing: function(x){ return x; }, // linear
-		speed: 60, // KM/H
+		speed: 0, // KM/H
 		duration: 0
+	},
+
+	markerOptions: undefined,
+
+	initialize: function (latlngs, options, motionOptions, markerOptions) {
+		L.Util.setOptions(this, options);
+		if (motionOptions) {
+			this.motionOptions = L.Util.extend({}, this.motionOptions, motionOptions);
+		}
+
+		if (markerOptions) {
+			this.markerOptions = L.Util.extend({}, markerOptions);
+		}
+
+		this._bounds = L.latLngBounds();
+		this._linePoints = this._convertLatLngs(latlngs);
+		if (!L.LineUtil.isFlat(this._linePoints)) {
+			this._linePoints = this._linePoints[0];
+		}
+		
+		this._latlngs = [];
 	},
 
 	/**
@@ -31,10 +53,10 @@ L.Motion.Animate = {
     */
 	beforeAdd: function (map) {
 		if (!map.getPane(this.options.pane)) {
-			map.createPane(this.options.pane).style.zIndex = 499;
+			map.createPane(this.options.pane).style.zIndex = 599;
 		}
 
-		L.Polyline.prototype.beforeAdd.call(this, map);
+		this._renderer = map.getRenderer(this);
 	},
 
 	/**
@@ -42,11 +64,14 @@ L.Motion.Animate = {
 		@return {MotionObject} this
     */
     onAdd: function (map) {
-        L.Polyline.prototype.onAdd.call(this, map);
+		this._renderer._initPath(this);
+		this._reset();
+		this._renderer._addPath(this);
 
-		if (this.options.auto) {
+		if (this.motionOptions.auto) {
 			this.startMotion();
 		}
+
         return this;
     },
 
@@ -58,7 +83,8 @@ L.Motion.Animate = {
 		if (this.__marker) {
 			map.removeLayer(this.__marker);
 		}
-        L.Polyline.prototype.onRemove.call(this, map);
+
+		this._renderer._removePath(this);
 	},
 
 	/**
@@ -66,10 +92,10 @@ L.Motion.Animate = {
     */
     _motion: function (startTime) {
 		var ellapsedTime = (new Date()).getTime() - startTime;
-        var durationRatio = ellapsedTime / this.options.duration; // 0 - 1
+        var durationRatio = ellapsedTime / this.motionOptions.duration; // 0 - 1
 
 		if (durationRatio < 1) {
-			durationRatio = this.options.easing(durationRatio, ellapsedTime, 0, 1, this.options.duration);
+			durationRatio = this.motionOptions.easing(durationRatio, ellapsedTime, 0, 1, this.motionOptions.duration);
 			var nextPoint = L.Motion.Utils.interpolateOnLine(this._map, this._linePoints, durationRatio);
 
 			this.addLatLng(nextPoint.latLng);
@@ -80,7 +106,7 @@ L.Motion.Animate = {
 				this._motion(startTime);
 			}, this);
 		} else {
-			this.stopMotion(this._linePoints);
+			this.stopMotion();
 		}
     },
 
@@ -89,11 +115,9 @@ L.Motion.Animate = {
         @param {LatLng} nextPoint next animation point
     */
 	_drawMarker: function (nextPoint) {
-		var mo = this.options.markerOptions;
-		if (mo) {
+		if (this.markerOptions) {
 			if (!this.__marker) {
-				mo.attribution = this.options.attribution;
-				this.__marker = L.marker(nextPoint, mo);
+				this.__marker = L.marker(nextPoint, this.markerOptions);
 				this.__marker.addTo(this._map);
 				this.__marker.addEventParent(this);
 			} else {
@@ -104,14 +128,17 @@ L.Motion.Animate = {
 					angle += 360;
 				}
 
-				if (this.options.rotateMarker) {
-					var motionMarkerOnLine = 0;
-					var baseAttributeValue = m._icon.children[0].getAttribute("motion-base");
-					if (baseAttributeValue && !isNaN(+baseAttributeValue)) {
-						motionMarkerOnLine = +baseAttributeValue;
-					}
+				if (m._icon.children.length) {
+					var needToRotateMarker = m._icon.children[0].getAttribute("motion-base");
 
-					m._icon.children[0].style.transform = "rotate(-" + Math.round(angle + motionMarkerOnLine) +"deg)";
+					if (needToRotateMarker) {
+						var motionMarkerOnLine = 0;
+						if (needToRotateMarker && !isNaN(+needToRotateMarker)) {
+							motionMarkerOnLine = +needToRotateMarker;
+						}
+
+						m._icon.children[0].style.transform = "rotate(-" + Math.round(angle + motionMarkerOnLine) +"deg)";
+					}
 				}
 
 				m.setLatLng(nextPoint);
@@ -123,19 +150,21 @@ L.Motion.Animate = {
         Removes marker from the map
     */
 	_removeMarker: function () {
-		if (this.options.removeMarkerOnEnd && this.__marker) {
+		if (this.markerOptions.removeOnEnd && this.__marker) {
 			this.__marker.remove();
-			this.__marker = null;
+			delete this.__marker;
 		}
 	},
 
 	/**
         Starts animation of current object
-        @param {LatLng[]} points initial points to show on the map on starting animation
     */
-    startMotion: function (points) {
+    startMotion: function () {
 		if (!this.animation) {
-			points = points || [];
+			//this._linePoints = this.getLatLngs();
+			if (!this.motionOptions.duration) {
+				this.motionOptions.duration = L.Motion.Utils.getDuration(this._linePoints, this.motionOptions.speed)
+			}
 			this.setLatLngs([]);
 	        this._motion((new Date).getTime());
 			this.fire(L.Motion.Event.Started, {layer: this}, false);
@@ -148,12 +177,11 @@ L.Motion.Animate = {
         Stops animation of current object
         @param {LatLng[]} points full object points collection or empty collection for cleanup
     */
-    stopMotion: function (points) {
-		points = points || [];
+    stopMotion: function () {
 		this.pauseMotion();
-		this.setLatLngs(points);
-		this._removeMarker();
+		this.setLatLngs(this._linePoints);
 		this.__ellapsedTime = null;
+		this._removeMarker();
 		this.fire(L.Motion.Event.Ended, {layer: this}, false);
 
 		return this;
@@ -177,6 +205,9 @@ L.Motion.Animate = {
     */
 	resumeMotion: function () {
 		if (!this.animation && this.__ellapsedTime) {
+			if (!this.motionOptions.duration) {
+				this.motionOptions.duration = L.Motion.Utils.getDuration(this._linePoints, this.motionOptions.speed)
+			}
 			this._motion((new Date).getTime() - (this.__ellapsedTime));
 			this.fire(L.Motion.Event.Resumed, {layer: this}, false);
 		}
@@ -200,6 +231,16 @@ L.Motion.Animate = {
 			}
 		}
 
+		return this;
+	},
+
+	motionDuration: function (duration) {
+		this.motionOptions.duration = duration || 0;
+		return this;
+	},
+
+	motionSpeed: function (speed) {
+		this.motionOptions.speed = speed || 0;
 		return this;
 	}
 }

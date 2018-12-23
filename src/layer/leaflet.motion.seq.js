@@ -95,9 +95,9 @@ L.Motion.Seq = L.Motion.Group.extend ({
 		}
 	},
 
-	__putActiveLayer__: function (layer) {
-		this._activeLayer = layer;
-		this.fire(L.Motion.Event.Section, {layer: layer}, false);
+	__putActiveLayer__: function (e) {
+		this._activeLayer = e.layer;
+		this.fire(L.Motion.Event.Section, {layer: this._activeLayer}, false);
 	}
 });
 

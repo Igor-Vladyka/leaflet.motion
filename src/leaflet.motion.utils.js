@@ -102,7 +102,7 @@ L.Motion.Utils = {
         @return {Number} duration
     */
 	getDuration: function (collection, speed) {
-		speed = speed || this.options.speed || this.defaultOptions.speed;
+		speed = speed || this.options.speed || this.motionOptions.speed;
 		collection = collection || this._linePoints;
 		collection = collection.map(function(m){ return L.Motion.Utils.toLatLng(m); })
 		var distance = L.Motion.Utils.distance(collection);

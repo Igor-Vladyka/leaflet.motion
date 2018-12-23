@@ -5,8 +5,8 @@
 
 L.Motion.Group = L.FeatureGroup.extend ({
 	options: {
-		pane: L.Motion.Animate.defaultOptions.pane,
-		attribution: L.Motion.Animate.defaultOptions.attribution,
+		pane: L.Motion.Animate.options.pane,
+		attribution: L.Motion.Animate.options.attribution,
 	},
 
 	/**
