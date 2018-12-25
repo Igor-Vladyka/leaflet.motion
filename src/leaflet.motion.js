@@ -31,21 +31,26 @@ L.Motion.Animate = {
 
 	initialize: function (latlngs, options, motionOptions, markerOptions) {
 		L.Util.setOptions(this, options);
-		if (motionOptions) {
-			this.motionOptions = L.Util.extend({}, this.motionOptions, motionOptions);
-		}
-
-		if (markerOptions) {
-			this.markerOptions = L.Util.extend({}, markerOptions);
-		}
+		this.motionOptions = L.Util.extend({}, this.motionOptions, motionOptions || {});
+		this.markerOptions = L.Util.extend({}, markerOptions || {});
 
 		this._bounds = L.latLngBounds();
 		this._linePoints = this._convertLatLngs(latlngs);
 		if (!L.LineUtil.isFlat(this._linePoints)) {
 			this._linePoints = this._linePoints[0];
 		}
-		
+
 		this._latlngs = [];
+		L.Util.stamp(this); // Enforce proper animation order;
+	},
+
+	addLatLng: function(latLng, ring) {
+		latLng = L.Motion.Utils.toLatLng(latLng);
+		this._linePoints[0].push(latLng);
+		if (this._latlngs.length) {
+			this._latlngs.push(latLng);
+		}
+		return this;
 	},
 
 	/**
@@ -69,7 +74,7 @@ L.Motion.Animate = {
 		this._renderer._addPath(this);
 
 		if (this.motionOptions.auto) {
-			this.startMotion();
+			this.motionStart();
 		}
 
         return this;
@@ -79,7 +84,7 @@ L.Motion.Animate = {
         @param {Map} map the Leaflet Map
     */
 	onRemove: function (map) {
-		this.stopMotion();
+		this.motionStop();
 		if (this.__marker) {
 			map.removeLayer(this.__marker);
 		}
@@ -92,13 +97,16 @@ L.Motion.Animate = {
     */
     _motion: function (startTime) {
 		var ellapsedTime = (new Date()).getTime() - startTime;
-        var durationRatio = ellapsedTime / this.motionOptions.duration; // 0 - 1
+        var durationRatio = 1; // 0 - 1
+		if (this.motionOptions.duration) {
+			durationRatio = ellapsedTime / this.motionOptions.duration;
+		}
 
 		if (durationRatio < 1) {
 			durationRatio = this.motionOptions.easing(durationRatio, ellapsedTime, 0, 1, this.motionOptions.duration);
 			var nextPoint = L.Motion.Utils.interpolateOnLine(this._map, this._linePoints, durationRatio);
 
-			this.addLatLng(nextPoint.latLng);
+			L.Polyline.prototype.addLatLng.call(this, nextPoint.latLng);
 			this._drawMarker(nextPoint.latLng);
 
 			this.__ellapsedTime = ellapsedTime;
@@ -106,7 +114,7 @@ L.Motion.Animate = {
 				this._motion(startTime);
 			}, this);
 		} else {
-			this.stopMotion();
+			this.motionStop();
 		}
     },
 
@@ -150,7 +158,7 @@ L.Motion.Animate = {
         Removes marker from the map
     */
 	_removeMarker: function () {
-		if (this.markerOptions.removeOnEnd && this.__marker) {
+		if (this.markerOptions && this.markerOptions.removeOnEnd && this.__marker) {
 			this.__marker.remove();
 			delete this.__marker;
 		}
@@ -159,11 +167,15 @@ L.Motion.Animate = {
 	/**
         Starts animation of current object
     */
-    startMotion: function () {
-		if (!this.animation) {
+	motionStart: function () {
+		if (this._map && !this.animation) {
 			//this._linePoints = this.getLatLngs();
 			if (!this.motionOptions.duration) {
-				this.motionOptions.duration = L.Motion.Utils.getDuration(this._linePoints, this.motionOptions.speed)
+				if (this.motionOptions.speed) {
+					this.motionOptions.duration = L.Motion.Utils.getDuration(this._linePoints, this.motionOptions.speed);
+				} else {
+					this.motionOptions.duration = 0;
+				}
 			}
 			this.setLatLngs([]);
 	        this._motion((new Date).getTime());
@@ -177,8 +189,8 @@ L.Motion.Animate = {
         Stops animation of current object
         @param {LatLng[]} points full object points collection or empty collection for cleanup
     */
-    stopMotion: function () {
-		this.pauseMotion();
+    motionStop: function () {
+		this.motionPause();
 		this.setLatLngs(this._linePoints);
 		this.__ellapsedTime = null;
 		this._removeMarker();
@@ -190,7 +202,7 @@ L.Motion.Animate = {
 	/**
         Pauses animation of current object
     */
-	pauseMotion: function () {
+	motionPause: function () {
 		if (this.animation) {
 			L.Util.cancelAnimFrame(this.animation);
 			this.animation = null;
@@ -203,10 +215,14 @@ L.Motion.Animate = {
 	/**
         Resume animation of current object
     */
-	resumeMotion: function () {
+	motionResume: function () {
 		if (!this.animation && this.__ellapsedTime) {
 			if (!this.motionOptions.duration) {
-				this.motionOptions.duration = L.Motion.Utils.getDuration(this._linePoints, this.motionOptions.speed)
+				if (this.motionOptions.speed) {
+					this.motionOptions.duration = L.Motion.Utils.getDuration(this._linePoints, this.motionOptions.speed);
+				} else {
+					this.motionOptions.duration = 0;
+				}
 			}
 			this._motion((new Date).getTime() - (this.__ellapsedTime));
 			this.fire(L.Motion.Event.Resumed, {layer: this}, false);
@@ -218,16 +234,16 @@ L.Motion.Animate = {
 	/**
         Toggles animation of current object; Start/Pause/Resume;
     */
-	toggleMotion: function () {
+	motionToggle: function () {
 		if (this.animation) {
 			if (this.__ellapsedTime) {
-				this.pauseMotion();
+				this.motionPause();
 			}
 		} else {
 			if (this.__ellapsedTime) {
-				this.resumeMotion();
+				this.motionResume();
 			} else {
-				this.startMotion();
+				this.motionStart();
 			}
 		}
 

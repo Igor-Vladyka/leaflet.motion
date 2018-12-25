@@ -9,11 +9,11 @@ L.Motion.Seq = L.Motion.Group.extend ({
 	/**
 		Start first motion in current group;
 	*/
-	startMotion: function() {
+	motionStart: function() {
 		var layer = this.getFirstLayer();
 		if (layer) {
 			this.__prepareStart();
-			layer.startMotion();
+			layer.motionStart();
 			this.fire(L.Motion.Event.Started, {layer: this}, false);
 		}
 
@@ -23,8 +23,8 @@ L.Motion.Seq = L.Motion.Group.extend ({
 	/**
 		Stops all motions in current group;
 	*/
-	stopMotion: function() {
-		this.invoke("stopMotion");
+	motionStop: function() {
+		this.invoke("motionStop");
 		this._activeLayer = null;
 		this.fire(L.Motion.Event.Ended, {layer: this}, false);
 
@@ -34,9 +34,9 @@ L.Motion.Seq = L.Motion.Group.extend ({
 	/**
 		Pause current motion in current group;
 	*/
-	pauseMotion: function() {
+	motionPause: function() {
 		if (this._activeLayer) {
-			this._activeLayer.pauseMotion();
+			this._activeLayer.motionPause();
 			this.fire(L.Motion.Event.Paused, {layer: this}, false);
 		}
 
@@ -46,9 +46,9 @@ L.Motion.Seq = L.Motion.Group.extend ({
 	/**
 		Resume last motion in current group;
 	*/
-	resumeMotion: function() {
+	motionResume: function() {
 		if (this._activeLayer) {
-			this._activeLayer.resumeMotion();
+			this._activeLayer.motionResume();
 			this.fire(L.Motion.Event.Resumed, {layer: this}, false);
 		}
 
@@ -58,11 +58,11 @@ L.Motion.Seq = L.Motion.Group.extend ({
 	/**
 		Reset all motions in current group;
 	*/
-	toggleMotion: function () {
+	motionToggle: function () {
 		if (this._activeLayer) {
-			this.pauseMotion();
+			this.motionPause();
 		} else {
-			this.resumeMotion();
+			this.motionResume();
 		}
 
 		return this;
@@ -91,7 +91,9 @@ L.Motion.Seq = L.Motion.Group.extend ({
 		var currentObject = layers.filter(function(f){ return f._leaflet_id == currentId })[0];
 		var nextIndex = layers.indexOf(currentObject) + 1;
 		if (layers.length > nextIndex) {
-			layers[nextIndex].startMotion();
+			layers[nextIndex].motionStart();
+		} else {
+			this.fire(L.Motion.Event.Ended, {layer: this}, false);
 		}
 	},
 

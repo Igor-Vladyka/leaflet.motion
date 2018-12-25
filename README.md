@@ -8,49 +8,48 @@ A [leaflet](http://www.leafletjs.com) plugin which allows users to [apply animat
 ### Downloads
 **NPM**
 ````
-	npm install --save leaflet.motion
+npm install --save leaflet.motion
 ````
 
 **YARN**
 ````
-	yarn add leaflet.motion
+yarn add leaflet.motion
 ````
 
 ### Usage
-**Step 1.** Include the required js and css files in your document.
-
+**Include script**:
 ```html
-	<script src="dist/leaflet.motion.min.js"></script>
+<script src="dist/leaflet.motion.min.js"></script>
 ```
 
-**Step 2.** Use it the same way:
-
-``` js
-	L.motion.polyline([], options, motionOptions, markerOptions).addTo(map); //  as L.polyline
-	L.motion.polygon([], options, motionOptions, markerOptions).addTo(map); //  as L.polygon
-	L.motion.group([], options).addTo(map); //  as L.featureGroup - to run all animation at same time
-	L.motion.seq([], options).addTo(map); //  as L.featureGroup - to setup seq for animations.
+**Main options**:
+```js
+L.motion.polyline([], options, motionOptions, markerOptions).addTo(map); //  as L.polyline
+L.motion.polygon([], options, motionOptions, markerOptions).addTo(map); //  as L.polygon
+L.motion.group([], options).addTo(map); //  as L.featureGroup - to run all animation at same time
+L.motion.seq([], options).addTo(map); //  as L.featureGroup - to setup seq for animations.
 ```
 
-**Step 3.**
+### Options:
+
 You can pass a number of options to the plugin to control various settings.
 
-***Default control options***
+**Default control options**
 
 | Option        | Type         | Default      | Description   |
 | ------------- |--------------|--------------|---------------|
 | pane    		| [Pane](https://leafletjs.com/reference-1.3.4.html#map-pane) | 'polymotionPane' 	  | Default pane |
 
-***Motion options***
+**Motion options**
 
 | Option        | Type         | Default      | Description   |
 | ------------- |--------------|--------------|---------------|
 | auto     		| Boolean      | false  	  | Indicates auto start animation on plugin added to the map |
 | easing    	| [L.Motion.Ease](https://github.com/Igor-Vladyka/leaflet.motion/blob/master/src/leaflet.motion.easing.js)| L.Motion.Ease.linear | Animation strategy |
-| speed    		| Number | 50 	  | Motion speed in KM/H |
-| duration    	| Number | 0  | Motion duration in ms, 0 means no animation |
+| speed    		| Number | 0 	  | Motion speed in KM/s, yes, kilometers per second |
+| duration    	| Number | 0  | Motion duration in ms, 0 means no animation, istant rendering on motionStart()|
 
-***Marker options***
+**Marker options**
 
 All [MarkerOptions](https://leafletjs.com/reference-1.3.4.html#marker-option) that you can add to any marker + one more:
 
@@ -64,8 +63,40 @@ Here's an example of passing through some options:
 L.motion.polyline([[50,0], [60,10]], {
 	color: "transparent"
 }, {
-	auto: true
+	auto: true,
+	duration: 3000,
+	easing: L.Motion.Ease.easeInOutQuart
 }, {
-	removeOnEnd: true
+	removeOnEnd: true,
+	icon: L.divIcon({html: "<i class='fa fa-car fa-2x' aria-hidden='true'></i>", iconSize: L.point(27.5, 24)})
 }).addTo(map);
 ```
+
+### Public methods
+
+#### L.motion.*
+Public methods in all motion objects:
+``` js
+motionStart() // to start motion.
+motionStop() // to stop motion.
+motionPause() // to pause motion.
+motionResume() // to resume paused motion.
+motionToggle() // to pause motion, if it's running. To start motion if it's not. Also will resume motion if it was paused.
+```
+
+#### L.motion.polyline and L.motion.polygon
+Additional methods in polyline and polygon
+``` js
+	motionDuration(duration) // - expected duration for motion in milliseconds, can be used after motion is created.
+	motionSpeed(speed) // - expected motion speed in KM/H, can be used after motion is created.
+	addLatLng(latLng) // - allows to add additional point in the end for the motion animation.
+```
+
+### Motion Events
+| Event           | Value           		 			   | Description 		|											 
+| - | - | - |
+| L.Motion.Event.Started   | { layer } | Fires on motion stated on root element only |
+| L.Motion.Event.Paused | { layer } | Fires on motion paused on root element only |
+| L.Motion.Event.Resumed | { layer } | Fires on motion resumed on root element only |
+| L.Motion.Event.Ended | { layer } | Fires on motion ended on root element only |
+| L.Motion.Event.Section | { layer } | Fires on each motion section change in L.Motion.Seq starting with first one |

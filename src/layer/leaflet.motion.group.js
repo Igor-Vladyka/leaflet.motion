@@ -12,8 +12,8 @@ L.Motion.Group = L.FeatureGroup.extend ({
 	/**
 		Starts all motions in current group;
 	*/
-	startMotion: function () {
-		this.invoke("startMotion");
+	motionStart: function () {
+		this.invoke("motionStart");
 		this.fire(L.Motion.Event.Started, {layer: this}, false);
 		return this;
 	},
@@ -21,8 +21,8 @@ L.Motion.Group = L.FeatureGroup.extend ({
 	/**
 		Stops all motions in current group;
 	*/
-	stopMotion: function () {
-		this.invoke("stopMotion");
+	motionStop: function () {
+		this.invoke("motionStop");
 		this.fire(L.Motion.Event.Ended, {layer: this}, false);
 		return this;
 	},
@@ -30,8 +30,8 @@ L.Motion.Group = L.FeatureGroup.extend ({
 	/**
 		Pauses all motions in current group;
 	*/
-	pauseMotion: function () {
-		this.invoke("pauseMotion");
+	motionPause: function () {
+		this.invoke("motionPause");
 		this.fire(L.Motion.Event.Paused, {layer: this}, false);
 		return this;
 	},
@@ -39,8 +39,8 @@ L.Motion.Group = L.FeatureGroup.extend ({
 	/**
 		Reset all motions in current group;
 	*/
-	resumeMotion: function () {
-		this.invoke("resumeMotion");
+	motionResume: function () {
+		this.invoke("motionResume");
 		this.fire(L.Motion.Event.Resumed, {layer: this}, false);
 		return this;
 	},
@@ -48,8 +48,8 @@ L.Motion.Group = L.FeatureGroup.extend ({
 	/**
 		Reset all motions in current group;
 	*/
-	toggleMotion: function () {
-		this.invoke("toggleMotion");
+	motionToggle: function () {
+		this.invoke("motionToggle");
 		return this;
 	}
 });
