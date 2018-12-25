@@ -46,8 +46,8 @@ You can pass a number of options to the plugin to control various settings.
 | ------------- |--------------|--------------|---------------|
 | auto     		| Boolean      | false  	  | Indicates auto start animation on plugin added to the map |
 | easing    	| [L.Motion.Ease](https://github.com/Igor-Vladyka/leaflet.motion/blob/master/src/leaflet.motion.easing.js)| L.Motion.Ease.linear | Animation strategy |
-| speed    		| Number | 0 	  | Motion speed in KM/s, yes, kilometers per second |
-| duration    	| Number | 0  | Motion duration in ms, 0 means no animation, istant rendering on motionStart()|
+| speed    		| Number | 0 | Motion speed in KM/s, yes, kilometers per second |
+| duration    	| Number | 0 | Motion duration in ms, 0 means no animation, istant rendering on motionStart()|
 
 **Marker options**
 
@@ -87,13 +87,13 @@ motionToggle() // to pause motion, if it's running. To start motion if it's not.
 #### L.motion.polyline and L.motion.polygon
 Additional methods in polyline and polygon
 ``` js
-	motionDuration(duration) // - expected duration for motion in milliseconds, can be used after motion is created.
-	motionSpeed(speed) // - expected motion speed in KM/H, can be used after motion is created.
-	addLatLng(latLng) // - allows to add additional point in the end for the motion animation.
+motionDuration(duration) // - expected duration for motion in milliseconds, can be used after motion is created.
+motionSpeed(speed) // - expected motion speed in KM/H, can be used after motion is created.
+addLatLng(latLng) // - allows to add additional point in the end for the motion animation.
 ```
 
 ### Motion Events
-| Event           | Value           		 			   | Description 		|											 
+| Event           | Value     | Description |
 | - | - | - |
 | L.Motion.Event.Started   | { layer } | Fires on motion stated on root element only |
 | L.Motion.Event.Paused | { layer } | Fires on motion paused on root element only |
