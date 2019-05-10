@@ -46,7 +46,7 @@ L.Motion.Animate = {
 
 	addLatLng: function(latLng, ring) {
 		latLng = L.Motion.Utils.toLatLng(latLng);
-		this._linePoints[0].push(latLng);
+		this._linePoints.push(latLng);
 		if (this._latlngs.length) {
 			this._latlngs.push(latLng);
 		}
