@@ -87,6 +87,10 @@ L.Motion.Utils = {
         );
     },
 
+	/**
+        @param {LatLng[]} linePoints of coordinates
+        @return {Number} distance in meter
+    */
 	distance: function(linePoints){
 		var distanceInMeter = 0;
         for (var i = 1; i < linePoints.length; i++) {
@@ -98,12 +102,12 @@ L.Motion.Utils = {
 
 	/**
         @param {LatLng[]} collection of coordinates
-        @param {Number} speed in KM/s
-        @return {Number} duration
+        @param {Number} speed in KM/H
+        @return {Number} duration in ms
     */
 	getDuration: function (collection, speed) {
 		var distance = L.Motion.Utils.distance(collection.map(function(m){ return L.Motion.Utils.toLatLng(m); })); // in meters;
-		return distance/(speed/3600);
+		return distance/(speed/3600); // m / (km/h * 1000 => m/h / (60 * 60)) => m / k/s (m/s * 1000) => 1000 * m / m/s => ms;
 	},
 
 	toLatLng: function(a, b, c) {

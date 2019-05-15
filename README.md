@@ -46,8 +46,8 @@ You can pass a number of options to the plugin to control various settings.
 | ------------- |--------------|--------------|---------------|
 | auto     		| Boolean      | false  	  | Indicates auto start animation on plugin added to the map |
 | easing    	| [L.Motion.Ease](https://github.com/Igor-Vladyka/leaflet.motion/blob/master/src/leaflet.motion.easing.js)| L.Motion.Ease.linear | Animation strategy |
-| speed    		| Number | 0 | Motion speed in KM/s, yes, kilometers per second |
-| duration    	| Number | 0 | Motion duration in ms, 0 means no animation, istant rendering on motionStart()|
+| speed    		| Number | 0 | Motion speed in KM/H |
+| duration    	| Number | 0 | Motion duration in ms, 0 means no animation, instant rendering on motionStart()|
 
 **Marker options**
 

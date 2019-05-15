@@ -24,7 +24,7 @@ L.Motion.Animate = {
 		auto: false,
 		easing: function(x){ return x; }, // linear
 		speed: 0, // KM/H
-		duration: 0
+		duration: 0 // ms
 	},
 
 	markerOptions: undefined,
