@@ -40,6 +40,7 @@ L.Motion.Animate = {
 			this._linePoints = this._linePoints[0];
 		}
 
+		this._initializeMarker();
 		this._latlngs = [];
 		L.Util.stamp(this); // Enforce proper animation order;
 	},
@@ -72,6 +73,9 @@ L.Motion.Animate = {
 		this._renderer._initPath(this);
 		this._reset();
 		this._renderer._addPath(this);
+		if (this.__marker && this.markerOptions.showMarker) {
+			this.__marker.addTo(map);
+		}
 
 		if (this.motionOptions.auto) {
 			this.motionStart();
@@ -114,7 +118,7 @@ L.Motion.Animate = {
 				this._motion(startTime);
 			}, this);
 		} else {
-			this.motionStop();
+			this.motionStop(true);
 		}
     },
 
@@ -123,21 +127,18 @@ L.Motion.Animate = {
         @param {LatLng} nextPoint next animation point
     */
 	_drawMarker: function (nextPoint) {
-		if (this.markerOptions) {
-			if (!this.__marker) {
-				this.__marker = L.marker(nextPoint, this.markerOptions);
-				this.__marker.addTo(this._map);
-				this.__marker.addEventParent(this);
-			} else {
-				var m = this.__marker;
-				var prevPoint = m.getLatLng();
-				var angle = Math.atan2(nextPoint.lat - prevPoint.lat, nextPoint.lng - prevPoint.lng) * 180 / Math.PI;
-				if (angle < 0) {
-					angle += 360;
-				}
+		var marker = this.getMarker();
+		if (marker) {
+			var prevPoint = marker.getLatLng();
 
-				if (m._icon.children.length) {
-					var needToRotateMarker = m._icon.children[0].getAttribute("motion-base");
+			// [0, 0] Means that marker is not added yet to the map
+			var initialPoints = this._linePoints[0];
+			if (prevPoint.lat === initialPoints.lat && prevPoint.lng === initialPoints.lng) {
+				marker.addTo(this._map);
+				marker.addEventParent(this);
+			} else {
+				if (marker._icon && marker._icon.children.length) {
+					var needToRotateMarker = marker._icon.children[0].getAttribute("motion-base");
 
 					if (needToRotateMarker) {
 						var motionMarkerOnLine = 0;
@@ -145,22 +146,32 @@ L.Motion.Animate = {
 							motionMarkerOnLine = +needToRotateMarker;
 						}
 
-						m._icon.children[0].style.transform = "rotate(-" + Math.round(angle + motionMarkerOnLine) +"deg)";
+						marker._icon.children[0].style.transform = "rotate(-" + Math.round(L.Motion.Utils.getAngle(prevPoint, nextPoint) + motionMarkerOnLine) +"deg)";
 					}
 				}
-
-				m.setLatLng(nextPoint);
 			}
+
+			marker.setLatLng(nextPoint);
 		}
 	},
 
 	/**
         Removes marker from the map
     */
-	_removeMarker: function () {
-		if (this.markerOptions && this.markerOptions.removeOnEnd && this.__marker) {
-			this.__marker.remove();
-			delete this.__marker;
+	_removeMarker: function (animEnded) {
+		if (this.markerOptions && this.__marker) {
+			if (!animEnded || this.markerOptions.removeOnEnd) {
+				this._map.removeLayer(this.__marker);
+			}
+		}
+	},
+
+	/**
+        Initialize marker from marker options and add it to the map if needed
+    */
+	_initializeMarker: function () {
+		if (this.markerOptions) {
+			this.__marker = L.marker(this._linePoints[0], this.markerOptions);
 		}
 	},
 
@@ -169,7 +180,6 @@ L.Motion.Animate = {
     */
 	motionStart: function () {
 		if (this._map && !this.animation) {
-			//this._linePoints = this.getLatLngs();
 			if (!this.motionOptions.duration) {
 				if (this.motionOptions.speed) {
 					this.motionOptions.duration = L.Motion.Utils.getDuration(this._linePoints, this.motionOptions.speed);
@@ -189,11 +199,11 @@ L.Motion.Animate = {
         Stops animation of current object
         @param {LatLng[]} points full object points collection or empty collection for cleanup
     */
-    motionStop: function () {
+    motionStop: function (animEnded) {
 		this.motionPause();
 		this.setLatLngs(this._linePoints);
 		this.__ellapsedTime = null;
-		this._removeMarker();
+		this._removeMarker(animEnded);
 		this.fire(L.Motion.Event.Ended, {layer: this}, false);
 
 		return this;
@@ -258,5 +268,19 @@ L.Motion.Animate = {
 	motionSpeed: function (speed) {
 		this.motionOptions.speed = speed || 0;
 		return this;
+	},
+
+	/**
+		Returns current constructed marker
+	*/
+	getMarker: function () {
+		return this.__marker;
+	},
+
+	/**
+		Returns markers array from all inner layers without flattering.
+	*/
+	getMarkers: function () {
+		return [this.getMarker()];
 	}
 }

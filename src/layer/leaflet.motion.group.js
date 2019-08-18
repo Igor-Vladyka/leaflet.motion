@@ -51,6 +51,13 @@ L.Motion.Group = L.FeatureGroup.extend ({
 	motionToggle: function () {
 		this.invoke("motionToggle");
 		return this;
+	},
+
+	/**
+		Returns markers array from all inner layers without flattering.
+	*/
+	getMarkers: function () {
+		return this.getLayers().map(function(l) { return l.getMarkers(); });
 	}
 });
 

@@ -44,7 +44,7 @@ You can pass a number of options to the plugin to control various settings.
 
 | Option        | Type         | Default      | Description   |
 | ------------- |--------------|--------------|---------------|
-| auto     		| Boolean      | false  	  | Indicates auto start animation on plugin added to the map |
+| auto     		| Boolean      | false  	  | Indicates auto start animation when motion object added to the map |
 | easing    	| [L.Motion.Ease](https://github.com/Igor-Vladyka/leaflet.motion/blob/master/src/leaflet.motion.easing.js)| L.Motion.Ease.linear | Animation strategy |
 | speed    		| Number | 0 | Motion speed in KM/H |
 | duration    	| Number | 0 | Motion duration in ms, 0 means no animation, instant rendering on motionStart()|
@@ -82,6 +82,7 @@ motionStop() // to stop motion.
 motionPause() // to pause motion.
 motionResume() // to resume paused motion.
 motionToggle() // to pause motion, if it's running. To start motion if it's not. Also will resume motion if it was paused.
+getMarkers() // to get all markes from all motion sub components. Will return multi-dimensional array of markers.
 ```
 
 #### L.motion.polyline and L.motion.polygon
@@ -90,6 +91,7 @@ Additional methods in polyline and polygon
 motionDuration(duration) // - expected duration for motion in milliseconds, can be used after motion is created.
 motionSpeed(speed) // - expected motion speed in KM/H, can be used after motion is created.
 addLatLng(latLng) // - allows to add additional point in the end for the motion animation.
+getMarker() // returns marker (if markerOptions is passed on creation) to attach needed behavior. Marker will be added to the map only during animation
 ```
 
 ### Motion Events

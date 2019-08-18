@@ -133,5 +133,14 @@ L.Motion.Utils = {
 			return null;
 		}
 		return L.latLng(a, b, c);
+	},
+
+	getAngle: function(prevPoint, nextPoint) {
+		var angle = Math.atan2(nextPoint.lat - prevPoint.lat, nextPoint.lng - prevPoint.lng) * 180 / Math.PI;
+		if (angle < 0) {
+			angle += 360;
+		}
+
+		return angle;
 	}
 };
