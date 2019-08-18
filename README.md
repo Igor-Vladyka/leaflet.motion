@@ -56,6 +56,7 @@ All [MarkerOptions](https://leafletjs.com/reference-1.3.4.html#marker-option) th
 | Option        | Type         | Default      | Description   |
 | ------------- |--------------|--------------|---------------|
 | removeOnEnd	| Boolean | false  | Removes marker from map on motion end |
+| showMarker	| Boolean | false  | Add marker to the map on first line point when motion just added(start can be delayed) to the map |
 
 
 Here's an example of passing through some options:
@@ -68,6 +69,7 @@ L.motion.polyline([[50,0], [60,10]], {
 	easing: L.Motion.Ease.easeInOutQuart
 }, {
 	removeOnEnd: true,
+	showMarker: true,
 	icon: L.divIcon({html: "<i class='fa fa-car fa-2x' aria-hidden='true'></i>", iconSize: L.point(27.5, 24)})
 }).addTo(map);
 ```
