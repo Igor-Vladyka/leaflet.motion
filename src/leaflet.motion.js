@@ -77,6 +77,13 @@ L.Motion.Animate = {
 			this.__marker.addTo(map);
 		}
 
+		if(this.__marker._icon && this.__marker._icon.children.length){
+			var baseRotationAngle = marker._icon.children[0].getAttribute("motion-base");
+			if(baseRotationAngle){
+				this.__marker._icon.children[0].style.transform = "rotate(" + baseRotationAngle + "deg)";
+			}	
+		}
+		
 		if (this.motionOptions.auto) {
 			this.motionStart();
 		}
