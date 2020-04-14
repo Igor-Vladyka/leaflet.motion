@@ -1,13 +1,13 @@
 {
   "name": "leaflet.motion",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "keywords": [
     "leaflet.js",
     "browser",
     "move",
     "motion",
     "animation",
-	"line animation"
+    "line animation"
   ],
   "description": "Animation plugin for Leaflet.js",
   "homepage": "https://github.com/Igor-Vladyka/leaflet.motion#readme",
@@ -19,6 +19,8 @@
   "author": "Igor Vladyka <igor.vladyka@gmail.com> (https://github.com/Igor-Vladyka/)",
   "license": "MIT (http://www.opensource.org/licenses/mit-license.php)",
   "devDependencies": {
-    "webpack": "^4.0.0"
-  }
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {}
 }
