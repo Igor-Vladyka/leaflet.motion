@@ -104,3 +104,12 @@ getMarker() // returns marker (if markerOptions is passed on creation) to attach
 | L.Motion.Event.Resumed | { layer } | Fires on motion resumed on root element only |
 | L.Motion.Event.Ended | { layer } | Fires on motion ended on root element only |
 | L.Motion.Event.Section | { layer } | Fires on each motion section change in L.Motion.Seq starting with first one |
+
+#### Dependencies:
+Please include next leaflet modules to make it work properly, or just whole Leaflet.js :)
+``` js
+L.Polygon
+L.Polyline
+L.FeatureGroup
+L.Util
+```

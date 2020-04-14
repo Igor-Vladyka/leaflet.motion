@@ -36,7 +36,7 @@ L.Motion.Animate = {
 
 		this._bounds = L.latLngBounds();
 		this._linePoints = this._convertLatLngs(latlngs);
-		if (!L.LineUtil.isFlat(this._linePoints)) {
+		if (!L.Motion.Utils.isFlat(this._linePoints)) {
 			this._linePoints = this._linePoints[0];
 		}
 

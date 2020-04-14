@@ -142,5 +142,10 @@ L.Motion.Utils = {
 		}
 
 		return angle;
+	},
+
+	// Leaflet -> geometries -> LineUtil
+	isFlat: function (latlngs) {
+		return !L.Util.isArray(latlngs[0]) || (typeof latlngs[0][0] !== 'object' && typeof latlngs[0][0] !== 'undefined');
 	}
 };
