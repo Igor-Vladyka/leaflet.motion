@@ -1,6 +1,6 @@
 /*!
  * 
- *  leaflet.motion - v0.1.7 (https://github.com/Igor-Vladyka/leaflet.motion#readme) 
+ *  leaflet.motion - v0.1.8 (https://github.com/Igor-Vladyka/leaflet.motion#readme) 
  *  Animation plugin for Leaflet.js
  *  
  *  MIT (http://www.opensource.org/licenses/mit-license.php)
@@ -106,6 +106,17 @@ eval("/**\n\tMIT License http://www.opensource.org/licenses/mit-license.php\n\tA
 
 /***/ }),
 
+/***/ "./src/layer/leaflet.motion.polygon.js":
+/*!*********************************************!*\
+  !*** ./src/layer/leaflet.motion.polygon.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/**\n\tMIT License http://www.opensource.org/licenses/mit-license.php\n\tAuthor Igor Vladyka <igor.vladyka@gmail.com> (https://github.com/Igor-Vladyka/leaflet.motion)\n**/\n\nL.Motion.Polygon = L.Polygon.extend(L.Motion.Animate);\n\nL.motion.polygon = function(latlngs, options, motionOptions, markerOptions){\n    return new L.Motion.Polygon(latlngs, options, motionOptions, markerOptions);\n};\n\n\n//# sourceURL=webpack:///./src/layer/leaflet.motion.polygon.js?");
+
+/***/ }),
+
 /***/ "./src/layer/leaflet.motion.polyline.js":
 /*!**********************************************!*\
   !*** ./src/layer/leaflet.motion.polyline.js ***!
@@ -162,13 +173,13 @@ eval("/**\r\n\tMIT License http://www.opensource.org/licenses/mit-license.php\r\
 /***/ }),
 
 /***/ 0:
-/*!***************************************************************************************************************************************************************************************************************!*\
-  !*** multi ./src/leaflet.motion.js ./src/leaflet.motion.utils.js ./src/leaflet.motion.easing.js ./src/layer/leaflet.motion.polyline.js ./src/layer/leaflet.motion.group.js ./src/layer/leaflet.motion.seq.js ***!
-  \***************************************************************************************************************************************************************************************************************/
+/*!*****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** multi ./src/leaflet.motion.js ./src/leaflet.motion.utils.js ./src/leaflet.motion.easing.js ./src/layer/leaflet.motion.polyline.js ./src/layer/leaflet.motion.polygon.js ./src/layer/leaflet.motion.group.js ./src/layer/leaflet.motion.seq.js ***!
+  \*****************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("__webpack_require__(/*! ./src/leaflet.motion.js */\"./src/leaflet.motion.js\");\n__webpack_require__(/*! ./src/leaflet.motion.utils.js */\"./src/leaflet.motion.utils.js\");\n__webpack_require__(/*! ./src/leaflet.motion.easing.js */\"./src/leaflet.motion.easing.js\");\n__webpack_require__(/*! ./src/layer/leaflet.motion.polyline.js */\"./src/layer/leaflet.motion.polyline.js\");\n__webpack_require__(/*! ./src/layer/leaflet.motion.group.js */\"./src/layer/leaflet.motion.group.js\");\nmodule.exports = __webpack_require__(/*! ./src/layer/leaflet.motion.seq.js */\"./src/layer/leaflet.motion.seq.js\");\n\n\n//# sourceURL=webpack:///multi_./src/leaflet.motion.js_./src/leaflet.motion.utils.js_./src/leaflet.motion.easing.js_./src/layer/leaflet.motion.polyline.js_./src/layer/leaflet.motion.group.js_./src/layer/leaflet.motion.seq.js?");
+eval("__webpack_require__(/*! ./src/leaflet.motion.js */\"./src/leaflet.motion.js\");\n__webpack_require__(/*! ./src/leaflet.motion.utils.js */\"./src/leaflet.motion.utils.js\");\n__webpack_require__(/*! ./src/leaflet.motion.easing.js */\"./src/leaflet.motion.easing.js\");\n__webpack_require__(/*! ./src/layer/leaflet.motion.polyline.js */\"./src/layer/leaflet.motion.polyline.js\");\n__webpack_require__(/*! ./src/layer/leaflet.motion.polygon.js */\"./src/layer/leaflet.motion.polygon.js\");\n__webpack_require__(/*! ./src/layer/leaflet.motion.group.js */\"./src/layer/leaflet.motion.group.js\");\nmodule.exports = __webpack_require__(/*! ./src/layer/leaflet.motion.seq.js */\"./src/layer/leaflet.motion.seq.js\");\n\n\n//# sourceURL=webpack:///multi_./src/leaflet.motion.js_./src/leaflet.motion.utils.js_./src/leaflet.motion.easing.js_./src/layer/leaflet.motion.polyline.js_./src/layer/leaflet.motion.polygon.js_./src/layer/leaflet.motion.group.js_./src/layer/leaflet.motion.seq.js?");
 
 /***/ })
 
