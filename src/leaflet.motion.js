@@ -81,7 +81,7 @@ L.Motion.Animate = {
 			var baseRotationAngle = this.__marker._icon.children[0].getAttribute("motion-base");
 			if(baseRotationAngle){
 				this.__marker._icon.children[0].style.transform = "rotate(" + baseRotationAngle + "deg)";
-			}	
+			}
 		}
 
 		if (this.motionOptions.auto) {

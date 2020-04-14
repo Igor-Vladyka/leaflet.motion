@@ -114,19 +114,19 @@
 					}, {
 						removeOnEnd: true,
 						icon: L.divIcon({html: "<i class='fa fa-car fa-2x' aria-hidden='true'></i>", iconSize: L.point(27.5, 24)})
-					}).motionDuration(5000),
+					}).motionDuration(7000),
 					L.motion.seq([L.motion.polyline(planeRoute1, {
 									color:"indigo"
 								}, null, {
 									removeOnEnd: true,
-									icon: L.divIcon({html: "<i class='fa fa-plane fa-2x' aria-hidden='true' motion-base='-45'></i>", iconSize: L.point(19, 24)})
-								}).motionDuration(0),
+									icon: L.divIcon({html: "<i class='fa fa-plane fa-2x' aria-hidden='true' motion-base='-43'></i>", iconSize: L.point(19, 24)})
+								}).motionDuration(5000),
 								L.motion.polyline(planeRoute2, {
 									color:"khaki"
 								}, null, {
 									removeOnEnd: true,
-									icon: L.divIcon({html: "<i class='fa fa-plane fa-2x' aria-hidden='true' motion-base='-45'></i>", iconSize: L.point(19, 24)})
-								}).motionDuration(3000)
+									icon: L.divIcon({html: "<i class='fa fa-plane fa-2x' aria-hidden='true' motion-base='-48'></i>", iconSize: L.point(19, 24)})
+								}).motionDuration(7000)
 							])
 				]).addTo(map);
 
