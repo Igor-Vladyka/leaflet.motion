@@ -1,6 +1,6 @@
 /*!
  * 
- *  leaflet.motion - v0.2.1 (https://github.com/Igor-Vladyka/leaflet.motion#readme) 
+ *  leaflet.motion - v0.2.2 (https://github.com/Igor-Vladyka/leaflet.motion#readme) 
  *  Animation plugin for Leaflet.js
  *  
  *  MIT (http://www.opensource.org/licenses/mit-license.php)

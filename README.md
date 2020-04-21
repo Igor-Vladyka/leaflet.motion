@@ -83,8 +83,8 @@ motionStart() // to start motion.
 motionStop() // to stop motion.
 motionPause() // to pause motion.
 motionResume() // to resume paused motion.
-motionToggle() // to pause motion, if it's running. To start motion if it's not. Also will resume motion if it was paused.
-getMarkers() // to get all markes from all motion sub components. Will return multi-dimensional array of markers.
+motionToggle() // to pause motion, if it's running. To start motion if it's not. Or just resume.
+getMarkers() // to get multi-dimensional array of markers from all motion sub components.
 ```
 
 #### L.motion.polyline and L.motion.polygon
@@ -92,14 +92,17 @@ Additional methods in polyline and polygon
 ``` js
 // - expected duration for motion in milliseconds, can be used after motion is created to start animation
 // and can be used during animation to change object animation duration.
-motionDuration(duration) 
+motionDuration(duration)
 
 // - expected motion speed in KM/H, can be used after motion is created to start animation
 // and can be used during animation to change object speed.
 motionSpeed(speed)
 
 addLatLng(latLng) // - allows to add additional point in the end for the motion animation.
-getMarker() // returns marker (if markerOptions is passed on creation) to attach needed behavior. Marker will be added to the map only during animation
+
+ // Returns marker (if markerOptions is passed on creation) to attach needed behavior.
+ // Marker will be added to the map only during animation
+getMarker()
 ```
 
 ### Motion Events
