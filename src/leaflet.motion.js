@@ -267,13 +267,36 @@ L.Motion.Animate = {
 		return this;
 	},
 
+	/**
+		Setup motion duration at any time
+	*/
 	motionDuration: function (duration) {
+		var prevDuration = this.motionSpeed.duration;
 		this.motionOptions.duration = duration || 0;
+
+		if (this.animation && prevDuration) {
+			this.motionPause();
+		    this.__ellapsedTime = this.__ellapsedTime * (prevDuration / duration);
+		    this.motionOptions.duration = duration;
+			this.motionResume();
+		}
 		return this;
 	},
 
+	/**
+		Setup motion speed at any time
+	*/
 	motionSpeed: function (speed) {
+		var prevSpeed = this.motionOptions.speed;
 		this.motionOptions.speed = speed || 0;
+
+		if (this.animation && prevSpeed) {
+			this.motionPause();
+		    this.__ellapsedTime = this.__ellapsedTime * (prevSpeed / speed);
+		    this.motionOptions.duration = L.Motion.Utils.getDuration(this._linePoints, this.motionOptions.speed);
+			this.motionResume();
+		}
+
 		return this;
 	},
 

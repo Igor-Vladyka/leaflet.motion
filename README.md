@@ -90,8 +90,14 @@ getMarkers() // to get all markes from all motion sub components. Will return mu
 #### L.motion.polyline and L.motion.polygon
 Additional methods in polyline and polygon
 ``` js
-motionDuration(duration) // - expected duration for motion in milliseconds, can be used after motion is created.
-motionSpeed(speed) // - expected motion speed in KM/H, can be used after motion is created.
+// - expected duration for motion in milliseconds, can be used after motion is created to start animation
+// and can be used during animation to change object animation duration.
+motionDuration(duration) 
+
+// - expected motion speed in KM/H, can be used after motion is created to start animation
+// and can be used during animation to change object speed.
+motionSpeed(speed)
+
 addLatLng(latLng) // - allows to add additional point in the end for the motion animation.
 getMarker() // returns marker (if markerOptions is passed on creation) to attach needed behavior. Marker will be added to the map only during animation
 ```
