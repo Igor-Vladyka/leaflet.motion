@@ -189,7 +189,7 @@ L.Motion.Animate = {
 		if (this._map && !this.animation) {
 			if (!this.motionOptions.duration) {
 				if (this.motionOptions.speed) {
-					this.motionOptions.duration = L.Motion.Utils.getDuration(this._linePoints, this.motionOptions.speed);
+					this.motionOptions.duration = L.Motion.Utils.getDuration(this._map, this._linePoints, this.motionOptions.speed);
 				} else {
 					this.motionOptions.duration = 0;
 				}
@@ -236,7 +236,7 @@ L.Motion.Animate = {
 		if (!this.animation && this.__ellapsedTime) {
 			if (!this.motionOptions.duration) {
 				if (this.motionOptions.speed) {
-					this.motionOptions.duration = L.Motion.Utils.getDuration(this._linePoints, this.motionOptions.speed);
+					this.motionOptions.duration = L.Motion.Utils.getDuration(this._map, this._linePoints, this.motionOptions.speed);
 				} else {
 					this.motionOptions.duration = 0;
 				}
@@ -293,7 +293,7 @@ L.Motion.Animate = {
 		if (this.animation && prevSpeed) {
 			this.motionPause();
 		    this.__ellapsedTime = this.__ellapsedTime * (prevSpeed / speed);
-		    this.motionOptions.duration = L.Motion.Utils.getDuration(this._linePoints, this.motionOptions.speed);
+		    this.motionOptions.duration = L.Motion.Utils.getDuration(this._map, this._linePoints, this.motionOptions.speed);
 			this.motionResume();
 		}
 

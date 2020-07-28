@@ -123,10 +123,11 @@ L.Motion.Utils = {
     },
 
 	/**
+		@param {L.Map} map Leaflet map to be calculate distances
         @param {LatLng[]} linePoints of coordinates
         @return {Number} distance in meter
     */
-	distance: function(linePoints){
+	distance: function(map, linePoints){
 		var distanceInMeter = 0;
         for (var i = 1; i < linePoints.length; i++) {
             distanceInMeter +=  map.distance(linePoints[i], linePoints[i - 1]);
@@ -136,12 +137,13 @@ L.Motion.Utils = {
 	},
 
 	/**
+		@param {L.Map} map Leaflet map to be calculate distances
         @param {LatLng[]} collection of coordinates
         @param {Number} speed in KM/H
         @return {Number} duration in ms
     */
-	getDuration: function (collection, speed) {
-		var distance = L.Motion.Utils.distance(collection.map(function(m){ return L.Motion.Utils.toLatLng(m); })); // in meters;
+	getDuration: function (map, collection, speed) {
+		var distance = L.Motion.Utils.distance(map, collection.map(function(m){ return L.Motion.Utils.toLatLng(m); })); // in meters;
 		return distance/(speed/3600); // m / (km/h * 1000 => m/h / (60 * 60)) => m / k/s (m/s * 1000) => 1000 * m / m/s => ms;
 	},
 
