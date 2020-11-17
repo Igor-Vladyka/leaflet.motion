@@ -76,6 +76,8 @@ L.Motion.Seq = L.Motion.Group.extend ({
 	__prepareStart: function() {
 		var self = this;
 		this.getLayers().forEach(function(l){
+			l.setLatLngs([]);
+			
 			l.off(L.Motion.Event.Ended, self.__clearActiveLayer__, self);
 			l.on(L.Motion.Event.Ended, self.__clearActiveLayer__, self);
 
