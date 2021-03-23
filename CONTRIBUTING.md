@@ -55,6 +55,10 @@ or, if you prefer [`yarn`](https://yarnpkg.com/) over `npm`:
 yarn install
 ```
 
+### Improving Documentation
+The documentation for Leaflet.Motion is in `README.md`. Good documentation means other
+people will be able to use your contributions.
+
 ### Making Changes to Leaflet Source
 TODO: Detail basic intro to understanding the source
 TODO: Detail how to test the project
