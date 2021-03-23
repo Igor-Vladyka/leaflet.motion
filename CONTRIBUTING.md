@@ -60,18 +60,18 @@ The documentation for Leaflet.Motion is in `README.md`. Good documentation means
 people will be able to use your contributions.
 
 ### Making Changes to Leaflet Source
-TODO: Detail basic intro to understanding the source
-TODO: Detail how to test the project
-TODO: Detail how to build the project
+ * TODO: Detail basic intro to understanding the source
+ * TODO: Detail how to test the project
+ * TODO: Detail how to build the project
 
 ## Code of Conduct
 
 Everyone is invited to participate in the Leaflet community and related projects:
 we want to create a welcoming and friendly environment.
 Harassment of participants or other unethical and unprofessional behavior will not be tolerated in our spaces.
-The [Contributor Covenant](http://contributor-covenant.org/version/1/3/0/)
-applies to all projects under the Leaflet organization.
-Report any issues to agafonkin@gmail.com.
+All projects under the official Leaflet organisation follow the
+[Contributor Covenant](http://contributor-covenant.org/version/1/3/0/), it's a good covenant - so we might
+as well stick to it here!
 
 ## Thank You
 
