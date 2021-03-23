@@ -32,6 +32,10 @@ Here are some tips for creating a helpful report that will make fixing it much e
  * *Bonus tip:* if the bug only appears in the master version but the stable version is fine,
    use `git bisect` to find the exact commit that introduced the bug.
 
+## Improving Documentation
+The documentation for Leaflet.Motion is in `README.md`. Good documentation means other
+people will be able to use your contributions.
+
 ## Contributing Code
 
 ### Considerations for Accepting Patches
@@ -54,10 +58,6 @@ or, if you prefer [`yarn`](https://yarnpkg.com/) over `npm`:
 ```
 yarn install
 ```
-
-### Improving Documentation
-The documentation for Leaflet.Motion is in `README.md`. Good documentation means other
-people will be able to use your contributions.
 
 ### Making Changes to Leaflet Source
  * TODO: Detail basic intro to understanding the source
