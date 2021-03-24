@@ -19,8 +19,8 @@
   "author": "Igor Vladyka <igor.vladyka@gmail.com> (https://github.com/Igor-Vladyka/)",
   "license": "MIT (http://www.opensource.org/licenses/mit-license.php)",
   "devDependencies": {
-    "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11"
+    "webpack": "^5",
+    "webpack-cli": "^4"
   },
   "dependencies": {}
 }
