@@ -74,7 +74,9 @@ files into `/dist/`.
 Commit your changes and the compiled files in two separate commits:
 
 Stage and commit your changes, and then run something like:
-`git commit dist/ -am"Built assets for release"`
+`git commit dist/ -m"Built assets for release"`
+or you can run
+`npm run publish`
 
 ## Code of Conduct
 
