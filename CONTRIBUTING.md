@@ -11,7 +11,7 @@ Contributing to Leaflet
 
 ## Getting Involved
 
-There are several ways to help improve Leaflet Motion:
+There are several ways to help improve Leaflet.Motion:
 
  * Discovering and [reporting bugs](#reporting-bugs);
  * [Improving Documentation](#improving-documentation) - especially if you've figured something out which is not covered by the documentation;
@@ -19,7 +19,7 @@ There are several ways to help improve Leaflet Motion:
 
 ## Reporting Bugs
 
-Before posting a bug on the Project [issues page](https://github.com/Igor-Vladyka/leaflet.motion/issues) please first make sure the issue is caused by Leaflet Motion and not by something else in your project, by [Leaflet itself](https://github.com/Leaflet/Leaflet/issues) or by another Leaflet plugin.
+Before posting a bug on the Project [issues page](https://github.com/Igor-Vladyka/leaflet.motion/issues) please first make sure the issue is caused by Leaflet.Motion and not by something else in your project, by [Leaflet itself](https://github.com/Leaflet/Leaflet/issues) or by another Leaflet plugin.
 
 
 Here are some tips for creating a helpful report that will make fixing it much easier and quicker.
@@ -59,14 +59,22 @@ or, if you prefer [`yarn`](https://yarnpkg.com/) over `npm`:
 yarn install
 ```
 
-### Making Changes to Leaflet Source
+### Making Changes to Leaflet.Motion Source
  * TODO: Detail basic intro to understanding the source
  * TODO: Detail how to test the project
 
 #### Building Assets
 
-To build the source run `npm run build` - this will compile both the minified and production dist
+While developing you can use `npm run watch` to run Webpack in watch mode - so it'll automatically
+recompile whenever you save a file.
+
+To build the source for packaging run `npm run build` - this will compile both the minified and production dist
 files into `/dist/`.
+
+Commit your changes and the compiled files in two separate commits:
+
+Stage and commit your changes, and then run something like:
+`git commit dist/ -am"Built assets for release"`
 
 ## Code of Conduct
 
@@ -79,7 +87,7 @@ as well stick to it here!
 
 ## Thank You
 
-Not only does your contribution to Leaflet Motion and its community earn our gratitude, but it also makes you AWESOME.
+Not only does your contribution to Leaflet.Motion and its community earn our gratitude, but it also makes you AWESOME.
 Join [this approved list of awesome people](https://github.com/Igor-Vladyka/leaflet.motion/graphs/contributors).
 
 ## Credits
