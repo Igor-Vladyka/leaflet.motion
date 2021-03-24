@@ -26,7 +26,7 @@
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "watch": "./node_modules/.bin/webpack --watch",
-    "publish": "git commit dist/ -m\"Built assets for release\""
+    "publish": "npm run build && git commit dist/ -m\"Built assets for release\""
   },
   "directories": {
     "dist": "dist"
