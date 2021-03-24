@@ -27,5 +27,9 @@
     "build": "./node_modules/.bin/webpack",
     "watch": "./node_modules/.bin/webpack --watch",
     "publish": "git commit dist/ -m\"Built assets for release\""
-  }
+  },
+  "directories": {
+    "dist": "dist"
+  },
+  "main": "./dist/leaflet.motion.min.js"
 }
