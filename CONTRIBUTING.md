@@ -62,7 +62,11 @@ yarn install
 ### Making Changes to Leaflet Source
  * TODO: Detail basic intro to understanding the source
  * TODO: Detail how to test the project
- * TODO: Detail how to build the project
+
+#### Building Assets
+
+To build the source run `npm run build` - this will compile both the minified and production dist
+files into `/dist/`.
 
 ## Code of Conduct
 
