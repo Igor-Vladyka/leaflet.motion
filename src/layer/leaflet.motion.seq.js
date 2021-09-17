@@ -9,7 +9,11 @@ L.Motion.Seq = L.Motion.Group.extend ({
 	/**
 		Start first motion in current group;
 	*/
-	motionStart: function() {
+	motionStart: function () {
+		// If we're already animating, don't do anything.
+		if (this._activeLayer) {
+			return;
+		}
 		var layer = this.getFirstLayer();
 		if (layer) {
 			this.__prepareStart();
