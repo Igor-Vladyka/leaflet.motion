@@ -77,6 +77,14 @@ L.Motion.Seq = L.Motion.Group.extend ({
 		return allLayers.length ? allLayers[0] : null;
 	},
 
+	addLayer: function (l) {
+		this.__prepareLayer(l);
+		L.Motion.Group.prototype.addLayer.call(this, l);
+		if (!this._activeLayer) {
+			l.motionStart();
+		}
+	},
+
 	__prepareStart: function() {
 		var self = this;
 		this.getLayers().forEach(function (l) {
