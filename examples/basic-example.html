@@ -16,9 +16,13 @@
     </head>
     <body>
         <h1>Leaflet.Motion Basic Examplc</h1>
+        <div>
+            <button id="button1">polyline.motionStart()</button>
+            <button id="button2">polyline.motionStop()</button>
+        </div>
         <div id="mapid"></div>
         <script>
-     		var map = L.map("mapid").setView([51, 1], 8);
+            var map = L.map("mapid").setView([51, 1], 8);
 
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                 attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
@@ -35,6 +39,16 @@
 
             // Start the motion (you could put this in a timer, or some other event)
             polyline.motionStart();
+
+            // End of Demo
+            
+            // Buttons for the demo
+            document.getElementById('button1').addEventListener('click', function () {
+                polyline.motionStart();
+            });
+            document.getElementById('button2').addEventListener('click', function () {
+                polyline.motionStop();
+            });
         </script>
     </body>
 </html>
