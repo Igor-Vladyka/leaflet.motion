@@ -22,5 +22,14 @@
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "scripts": {
+    "build": "./node_modules/.bin/webpack",
+    "watch": "./node_modules/.bin/webpack --watch",
+    "publish": "npm run build && git commit dist/ -m\"Built assets for release\""
+  },
+  "directories": {
+    "dist": "dist"
+  },
+  "main": "./dist/leaflet.motion.min.js"
 }

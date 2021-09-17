@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+            integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+            crossorigin="" />
+
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+        <script src="../dist/leaflet.motion.js"></script>
+        <style>
+            #mapid {
+                height: 400px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Leaflet.Motion Basic Example</h1>
+        <div>
+            <button id="button1">polyline.motionStart()</button>
+            <button id="button2">polyline.motionStop()</button>
+        </div>
+        <div id="mapid"></div>
+        <script>
+            var map = L.map("mapid").setView([51, 1], 8);
+
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            }).addTo(map);
+
+            // These are just some demo coordinates we've got.
+            var trackRoute = JSON.parse('[{"lat":51.15815239612826,"lng":-2.2055053710937504},{"lat":51.18569785341817,"lng":-2.1615600585937504},{"lat":51.19120493896969,"lng":-2.122009252198041},{"lat":51.22698519222996,"lng":-2.0187377929687504},{"lat":51.20221718842518,"lng":-1.979186986573041},{"lat":51.24211458943536,"lng":-1.8956908676773312},{"lat":51.22285808183325,"lng":-1.8429565429687502},{"lat":51.253114667550555,"lng":-1.7726440262049439},{"lat":51.25036488157529,"lng":-1.7023315094411375},{"lat":51.264112114656214,"lng":-1.6276245284825566},{"lat":51.28472525702113,"lng":-1.56829833984375},{"lat":51.26960987786426,"lng":-1.5309448074549437},{"lat":51.27510698339771,"lng":-1.4891967270523312},{"lat":51.29296795605501,"lng":-1.4474487304687502},{"lat":51.286099169144734,"lng":-1.3837279938161375},{"lat":51.27922935475756,"lng":-1.3397826813161373},{"lat":51.31494117540117,"lng":-1.2694701645523312},{"lat":51.32866911860522,"lng":-1.2057494278997185},{"lat":51.35611262745693,"lng":-1.1266478989273312},{"lat":51.39039390837808,"lng":-1.0695190262049439},{"lat":51.382168736719194,"lng":-1.0057982895523312},{"lat":51.37394211276064,"lng":-0.9596557449549438},{"lat":51.353369031707764,"lng":-0.9025268722325565},{"lat":51.347881294944216,"lng":-0.8651732560247184},{"lat":51.32866911860522,"lng":-0.8234251756221057},{"lat":51.31082203572863,"lng":-0.7860717270523311},{"lat":51.28335135620783,"lng":-0.6981811020523311},{"lat":51.291594301829406,"lng":-0.5905150528997184},{"lat":51.32043285621175,"lng":-0.5267943162471057},{"lat":51.36434245505222,"lng":-0.43670645914971834},{"lat":51.37805558339966,"lng":-0.35321029834449297},{"lat":51.3506252193158,"lng":-0.313659617677331},{"lat":51.32180564750844,"lng":-0.3004760574549437},{"lat":51.29296795605501,"lng":-0.27191153727471834},{"lat":51.27510698339771,"lng":-0.20159910432994368},{"lat":51.31631415723791,"lng":-0.12249740771949293},{"lat":51.361599352206966,"lng":-0.08074949495494367},{"lat":51.36022772609213,"lng":-0.0038450304418802266},{"lat":51.32866906624522,"lng":0.04449474625289441},{"lat":51.30807559747286,"lng":0.08184819482266904},{"lat":51.28747293535334,"lng":0.1367800030857325},{"lat":51.26686102604075,"lng":0.20709243603050712},{"lat":51.2599882819768,"lng":0.2444462198764086},{"lat":51.22148222615174,"lng":0.33453390933573246},{"lat":51.18156698919849,"lng":0.3960574138909579},{"lat":51.14988546610741,"lng":0.4663701821118594},{"lat":51.109908194320916,"lng":0.5718386638909579},{"lat":51.107149852721776,"lng":0.6751100812107326},{"lat":51.053329467578955,"lng":0.7805788982659579},{"lat":51.014650651391285,"lng":0.8377076033502817},{"lat":50.9690233345503,"lng":0.9036255721002818},{"lat":50.93996435333021,"lng":0.9585572127252818},{"lat":50.921966522212145,"lng":0.9651490766555072}]');
+
+            // Simply create a L.motion.polyline as usual, instead of L.polyline:
+            var polyline = L.motion.polyline(trackRoute).addTo(map)
+            
+            // Set how long you want the animation to last
+            polyline.motionDuration(8000);
+
+            // Start the motion (you could put this in a timer, or some other event)
+            polyline.motionStart();
+
+            // End of Demo
+            
+            // Buttons for the demo
+            document.getElementById('button1').addEventListener('click', function () {
+                polyline.motionStart();
+            });
+            document.getElementById('button2').addEventListener('click', function () {
+                polyline.motionStop();
+            });
+        </script>
+    </body>
+</html>
