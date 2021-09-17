@@ -4,6 +4,7 @@
 **/
 
 L.Motion.Seq = L.Motion.Group.extend ({
+	_started: false,
 	_activeLayer: null,
 
 	/**
@@ -18,6 +19,7 @@ L.Motion.Seq = L.Motion.Group.extend ({
 		if (layer) {
 			this.__prepareStart();
 			layer.motionStart();
+			this._started = true;
 			this.fire(L.Motion.Event.Started, {layer: this}, false);
 		}
 
@@ -30,8 +32,8 @@ L.Motion.Seq = L.Motion.Group.extend ({
 	motionStop: function() {
 		this.invoke("motionStop");
 		this._activeLayer = null;
-		this.fire(L.Motion.Event.Ended, {layer: this}, false);
-
+		this._started = false;
+		this.fire(L.Motion.Event.Ended, { layer: this }, false);
 		return this;
 	},
 
@@ -80,7 +82,9 @@ L.Motion.Seq = L.Motion.Group.extend ({
 	addLayer: function (l) {
 		this.__prepareLayer(l);
 		L.Motion.Group.prototype.addLayer.call(this, l);
-		if (!this._activeLayer) {
+		// If we have started animating but don't have a current layer,
+		// start this one.
+		if (this._started && !this._activeLayer) {
 			l.motionStart();
 		}
 	},
