@@ -115,6 +115,26 @@ addLatLng(latLng) // - allows to add additional point in the end for the motion 
 getMarker()
 ```
 
+#### L.motion.seq
+``` js
+addLayer(layer, autostart) // to append layer to the end of sequence and autostart it if needed
+```
+
+Now we can add new layers to Seq object.
+- If it's not started yet, new layers will be added and prepared to start.
+- If it's running right now new layer will be added and wait it turn.
+- If it's completed, and you want to run new layer right now, additional parameter should be passed.
+``` js
+var planePolyline = L.motion.polyline(planeRoute).motionDuration(2000);
+
+// Build the Sequence Group:
+var seqGroup = L.motion.seq([
+	trackPolyline, shipPolyline
+]).addTo(map);
+
+seqGroup.addLayer(planePolyline, true);
+```
+
 ### Motion Events
 | Event           | Value     | Description |
 | - | - | - |

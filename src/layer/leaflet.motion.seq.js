@@ -9,6 +9,9 @@ L.Motion.Seq = L.Motion.Group.extend ({
 	_completed: false,
 
 	addLayer: function (l, autostart) {
+		if (autostart === undefined) {
+			autostart = true;
+		}
 		this.__prepareLayer(l);
 		L.Motion.Group.prototype.addLayer.call(this, l);
 
@@ -38,8 +41,10 @@ L.Motion.Seq = L.Motion.Group.extend ({
 	/**
 		Stops all motions in current group;
 	*/
-	motionStop: function() {
-		this.invoke("motionStop");
+	motionStop: function(softstop) {
+		if (!softstop) {
+			this.invoke("motionStop");
+		}
 		this._activeLayer = null;
 		this._completed = true;
 		this.fire(L.Motion.Event.Ended, {layer: this}, false);
@@ -119,7 +124,8 @@ L.Motion.Seq = L.Motion.Group.extend ({
 		if (layers.length > nextIndex) {
 			layers[nextIndex].motionStart();
 		} else {
-			this.fire(L.Motion.Event.Ended, {layer: this}, false);
+			//this.fire(L.Motion.Event.Ended, {layer: this}, false);
+			this.motionStop(true);
 		}
 	},
 
