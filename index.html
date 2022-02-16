@@ -12,14 +12,14 @@
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
 
-		<script src="src/leaflet.motion.js"></script>
+		<!--script src="src/leaflet.motion.js"></script>
 		<script src="src/leaflet.motion.utils.js"></script>
 		<script src="src/leaflet.motion.easing.js"></script>
 		<script src="src/layer/leaflet.motion.polyline.js"></script>
 		<script src="src/layer/leaflet.motion.polygon.js"></script>
 		<script src="src/layer/leaflet.motion.group.js"></script>
-		<script src="src/layer/leaflet.motion.seq.js"></script>
-		<!--script src="dist/leaflet.motion.min.js"></script-->
+		<script src="src/layer/leaflet.motion.seq.js"></script-->
+		<script src="dist/leaflet.motion.min.js"></script>
         <style>
             html, body, #map { width: 100%; height: 100%; margin: 0px; padding: 0px;}
 			.leaflet-div-icon {
@@ -87,7 +87,7 @@
 			var shipRoute = JSON.parse('[{"lat":50.921966522212145,"lng":0.9651490766555072},{"lat":50.926120475839824,"lng":1.0437014233320954},{"lat":50.94965276094792,"lng":1.1008302960544827},{"lat":50.96210622406778,"lng":1.184326456859708},{"lat":50.98700308620511,"lng":1.2678226176649334},{"lat":51.014650625032424,"lng":1.3710940349847078},{"lat":51.018796350737,"lng":1.4677737560123207},{"lat":51.062994180347005,"lng":1.5600588452070954},{"lat":51.07265684948244,"lng":1.65234393440187},{"lat":51.08093750173957,"lng":1.7358400952070954},{"lat":51.11680330181327,"lng":1.7973634321242573},{"lat":51.136104124419646,"lng":1.8940431531518698},{"lat":51.137482451626596,"lng":2.0126956980675463},{"lat":51.18845145219318,"lng":2.1203612443059687},{"lat":51.1898282161464,"lng":2.2412108536809687},{"lat":51.18569780089507,"lng":2.335693342611194},{"lat":51.207632884080915,"lng":2.427429333329201},{"lat":51.18836197273001,"lng":2.519714422523976},{"lat":51.1677055637131,"lng":2.618591375648976},{"lat":51.129466960517135,"lng":2.6630860380828385}]');
 			var carRoute = JSON.parse('[{"lat":51.129466960517135,"lng":2.6630860380828385},{"lat":51.07664802198799,"lng":2.738342452794314},{"lat":51.055941653758396,"lng":2.749328780919314},{"lat":51.00067931792692,"lng":2.7778932172805075},{"lat":50.943967078334666,"lng":2.826233077794314},{"lat":50.89794502437422,"lng":2.867431640625},{"lat":50.846655509682435,"lng":2.9003906250000004},{"lat":50.824458803489804,"lng":2.9619141295552254},{"lat":50.79669804718136,"lng":3.0190430022776127},{"lat":50.76475273687021,"lng":3.1025391630828385},{"lat":50.72444284265441,"lng":3.1772460602223873},{"lat":50.65207604172236,"lng":3.282714877277613},{"lat":50.60469890778924,"lng":3.357421942055226},{"lat":50.562855920362125,"lng":3.425537142902613},{"lat":50.5181824559931,"lng":3.495849743485451},{"lat":50.47905843134065,"lng":3.570556808263064},{"lat":50.47626260659788,"lng":3.629882913082838},{"lat":50.492339146862776,"lng":3.772155828773976},{"lat":50.514693454200405,"lng":3.903991766273976},{"lat":50.510502790942944,"lng":3.9633178710937504},{"lat":50.49792872905663,"lng":4.024841375648976},{"lat":50.48185790425272,"lng":4.073730502277614},{"lat":50.47347053735934,"lng":4.133056774735452},{"lat":50.4776644868276,"lng":4.20336937531829},{"lat":50.479062245100565,"lng":4.231933560222388}]');
 			var planeRoute1 = JSON.parse('[{"lat":50.48445898955202,"lng":4.251709654927255},{"lat":50,"lng":0}]');
-			var planeRoute2 = JSON.parse('[{"lat":50,"lng":0},{"lat":51.15611417450841,"lng":-2.1906730905175213}]');
+			var planeRoute2 = JSON.parse('[{"lat":50,"lng":0},{"lat":51.15815239612826,"lng":-2.2055053710937504}]');
 
 			var seqGroup = L.motion.seq([
 					L.motion.polyline(trackRoute, {
@@ -118,7 +118,7 @@
 					L.motion.seq([L.motion.polyline(planeRoute1, {
 									color:"indigo"
 								}, null, {
-									removeOnEnd: true,
+									removeOnEnd: false,
 									icon: L.divIcon({html: "<i class='fa fa-plane fa-2x' aria-hidden='true' motion-base='-43'></i>", iconSize: L.point(19, 24)})
 								}).motionDuration(5000),
 								L.motion.polyline(planeRoute2, {

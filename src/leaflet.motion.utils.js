@@ -50,16 +50,17 @@ L.Motion.Utils = {
 		ratio = Math.max(Math.min(ratio, 1), 0);
 
 		if (ratio === 0) {
+			var singlePoint = latLngs[0] instanceof L.LatLng ? latLngs[0] : L.latLng(latLngs[0]);
 			return {
-				latLng: latLngs[0] instanceof L.LatLng ? latLngs[0] : L.latLng(latLngs[0]),
-				predecessor: -1
+				traveledPath: [singlePoint],
+				latLng: singlePoint
 			};
 		}
 
 		if (ratio == 1) {
 			return {
-				latLng: latLngs[latLngs.length -1] instanceof L.LatLng ? latLngs[latLngs.length -1] : L.latLng(latLngs[latLngs.length -1]),
-				predecessor: latLngs.length - 2
+				traveledPath: latLngs,
+				latLng: latLngs[latLngs.length -1] instanceof L.LatLng ? latLngs[latLngs.length -1] : L.latLng(latLngs[latLngs.length -1])
 			};
 		}
 
@@ -88,9 +89,12 @@ L.Motion.Utils = {
 
 		// compute the ratio relative to the segment [ab]
 		var segmentRatio = ((cumulativeDistanceToB - cumulativeDistanceToA) !== 0) ? ((ratioDist - cumulativeDistanceToA) / (cumulativeDistanceToB - cumulativeDistanceToA)) : 0;
+		var interpolatedPoint = this.interpolateOnLatLngSegment(pointA, pointB, segmentRatio);
+		var traveledPath = latLngs.slice(0, i);
+		traveledPath.push(interpolatedPoint);
 		return {
-			latLng: this.interpolateOnLatLngSegment(pointA, pointB, segmentRatio),
-			predecessor: i-1
+			traveledPath: traveledPath,
+			latLng: interpolatedPoint
 		};
 	},
 
