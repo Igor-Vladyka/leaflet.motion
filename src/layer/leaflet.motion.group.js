@@ -4,6 +4,9 @@
 **/
 
 L.Motion.Group = L.FeatureGroup.extend ({
+	_started: false,
+	_completed: false,
+
 	options: {
 		pane: L.Motion.Animate.options.pane,
 		attribution: L.Motion.Animate.options.attribution,
@@ -14,6 +17,8 @@ L.Motion.Group = L.FeatureGroup.extend ({
 	*/
 	motionStart: function () {
 		this.invoke("motionStart");
+		this._started = true;
+		this._completed = false;
 		this.fire(L.Motion.Event.Started, {layer: this}, false);
 		return this;
 	},
@@ -23,6 +28,7 @@ L.Motion.Group = L.FeatureGroup.extend ({
 	*/
 	motionStop: function () {
 		this.invoke("motionStop");
+		this._completed = true;
 		this.fire(L.Motion.Event.Ended, {layer: this}, false);
 		return this;
 	},

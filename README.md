@@ -74,6 +74,16 @@ L.motion.polyline([[50,0], [60,10]], {
 }).addTo(map);
 ```
 
+To rotate the marker you need to properly setup motion-base angle on 90* north, so that it can be rotated to the movement direction.
+``` js
+L.motion.polyline([{"lat":50,"lng":0},{"lat":51.15611417450841,"lng":-2.1906730905175213}], {
+	color:"khaki"
+}, null, {
+	removeOnEnd: true,
+	icon: L.divIcon({html: "<i class='fa fa-plane fa-2x' aria-hidden='true' motion-base='-48'></i>", iconSize: L.point(19, 24)})
+}).motionDuration(7000)
+```
+
 ### Public methods
 
 #### L.motion.*

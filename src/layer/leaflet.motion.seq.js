@@ -5,16 +5,31 @@
 
 L.Motion.Seq = L.Motion.Group.extend ({
 	_activeLayer: null,
+	_started: false,
+	_completed: false,
+
+	addLayer: function (l, autostart) {
+		this.__prepareLayer(l);
+		L.Motion.Group.prototype.addLayer.call(this, l);
+
+		if (!this._activeLayer && autostart && this._completed) {
+			l.motionStart();
+		}
+	},
 
 	/**
 		Start first motion in current group;
 	*/
 	motionStart: function() {
-		var layer = this.getFirstLayer();
-		if (layer) {
-			this.__prepareStart();
-			layer.motionStart();
-			this.fire(L.Motion.Event.Started, {layer: this}, false);
+		// We will start animation only when its not running
+		if (!this._activeLayer) {
+			var layer = this.getFirstLayer();
+			if (layer) {
+				layer.motionStart();
+				this._started = true;
+				this._completed = false;
+				this.fire(L.Motion.Event.Started, {layer: this}, false);
+			}
 		}
 
 		return this;
@@ -26,6 +41,7 @@ L.Motion.Seq = L.Motion.Group.extend ({
 	motionStop: function() {
 		this.invoke("motionStop");
 		this._activeLayer = null;
+		this._completed = true;
 		this.fire(L.Motion.Event.Ended, {layer: this}, false);
 
 		return this;
@@ -73,19 +89,27 @@ L.Motion.Seq = L.Motion.Group.extend ({
 		return allLayers.length ? allLayers[0] : null;
 	},
 
-	__prepareStart: function() {
-		var self = this;
-		this.getLayers().forEach(function(l){
+	/**
+		Initialise a layer so it's ready to be part of this motion sequence
+	*/
+	__prepareLayer: function (l) {
+		if (l.setLatLngs) {
 			l.setLatLngs([]);
-			
-			l.off(L.Motion.Event.Ended, self.__clearActiveLayer__, self);
-			l.on(L.Motion.Event.Ended, self.__clearActiveLayer__, self);
+		}
 
-			l.off(L.Motion.Event.Started, self.__putActiveLayer__, self);
-			l.on(L.Motion.Event.Started, self.__putActiveLayer__, self);
-		});
+		// When a layer finishes have it remove itself and call motionStart() on the next layer
+		l.off(L.Motion.Event.Ended, this.__clearActiveLayer__, this);
+		l.on(L.Motion.Event.Ended, this.__clearActiveLayer__, this);
+
+		// When a layer is started (by the last one ending) set it as the active layer
+		l.off(L.Motion.Event.Started, this.__putActiveLayer__, this);
+		l.on(L.Motion.Event.Started, this.__putActiveLayer__, this);
 	},
 
+	/**
+		Called by a layer (e.g. one of the sequence events) when it finishes. Is responsible for
+		cleaning up after itself and starting the next layer.
+	 */
 	__clearActiveLayer__: function (e) {
 		this._activeLayer = null;
 		var layers = this.getLayers();
@@ -99,6 +123,10 @@ L.Motion.Seq = L.Motion.Group.extend ({
 		}
 	},
 
+	/**
+		Called by a layer when it's started, sets itself as the active layer on the sequence
+		group and trigger any other events which need triggering.
+	 */
 	__putActiveLayer__: function (e) {
 		this._activeLayer = e.layer;
 		this.fire(L.Motion.Event.Section, {layer: this._activeLayer}, false);

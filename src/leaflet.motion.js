@@ -31,8 +31,13 @@ L.Motion.Animate = {
 
 	initialize: function (latlngs, options, motionOptions, markerOptions) {
 		L.Util.setOptions(this, options);
-		this.motionOptions = L.Util.extend({}, this.motionOptions, motionOptions || {});
-		this.markerOptions = L.Util.extend({}, markerOptions || {});
+		if (motionOptions) {
+			this.motionOptions = L.Util.extend({}, this.motionOptions, motionOptions);
+		}
+
+		if (markerOptions) {
+			this.markerOptions = L.Util.extend({}, markerOptions);
+		}
 
 		this._bounds = L.latLngBounds();
 		this._linePoints = this._convertLatLngs(latlngs);
@@ -75,12 +80,12 @@ L.Motion.Animate = {
 		this._renderer._addPath(this);
 		if (this.__marker && this.markerOptions.showMarker) {
 			this.__marker.addTo(map);
-		}
 
-		if(this.__marker._icon && this.__marker._icon.children.length){
-			var baseRotationAngle = this.__marker._icon.children[0].getAttribute("motion-base");
-			if(baseRotationAngle){
-				this.__marker._icon.children[0].style.transform = "rotate(" + baseRotationAngle + "deg)";
+			if(this.__marker._icon && this.__marker._icon.children.length){
+				var baseRotationAngle = this.__marker._icon.children[0].getAttribute("motion-base");
+				if(baseRotationAngle){
+					this.__marker._icon.children[0].style.transform = "rotate(" + baseRotationAngle + "deg)";
+				}
 			}
 		}
 

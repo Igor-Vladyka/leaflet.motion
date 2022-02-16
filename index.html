@@ -5,21 +5,21 @@
     	<meta charset="utf-8" />
 
     	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 		<link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/src/leaflet.draw.css"/>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 
-        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
 
-		<!--script src="src/leaflet.motion.js"></script>
+		<script src="src/leaflet.motion.js"></script>
 		<script src="src/leaflet.motion.utils.js"></script>
 		<script src="src/leaflet.motion.easing.js"></script>
 		<script src="src/layer/leaflet.motion.polyline.js"></script>
 		<script src="src/layer/leaflet.motion.polygon.js"></script>
 		<script src="src/layer/leaflet.motion.group.js"></script>
-		<script src="src/layer/leaflet.motion.seq.js"></script-->
-		<script src="dist/leaflet.motion.min.js"></script>
+		<script src="src/layer/leaflet.motion.seq.js"></script>
+		<!--script src="dist/leaflet.motion.min.js"></script-->
         <style>
             html, body, #map { width: 100%; height: 100%; margin: 0px; padding: 0px;}
 			.leaflet-div-icon {
@@ -123,10 +123,7 @@
 								}).motionDuration(5000),
 								L.motion.polyline(planeRoute2, {
 									color:"khaki"
-								}, null, {
-									removeOnEnd: true,
-									icon: L.divIcon({html: "<i class='fa fa-plane fa-2x' aria-hidden='true' motion-base='-48'></i>", iconSize: L.point(19, 24)})
-								}).motionDuration(7000)
+								}, null).motionDuration(7000)
 							])
 				]).addTo(map);
 
