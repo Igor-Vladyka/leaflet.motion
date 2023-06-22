@@ -127,6 +127,8 @@ L.Motion.Animate = {
 			this.setLatLngs(interpolatedLine.traveledPath);
 			this._drawMarker(interpolatedLine.latLng);
 
+			if(this.options.onTick) { this.options.onTick.bind(this)(nextPoint); }
+
 			this.__ellapsedTime = ellapsedTime;
 			this.animation = L.Util.requestAnimFrame(function(){
 				this._motion(startTime);
