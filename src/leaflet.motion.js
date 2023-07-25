@@ -161,7 +161,8 @@ L.Motion.Animate = {
 								motionMarkerOnLine = +needToRotateMarker;
 							}
 
-							icon.style.transform = "rotate(-" + Math.round(L.Motion.Utils.getAngle(prevPoint, nextPoint) + motionMarkerOnLine) +"deg)";
+							const markerAngle = -1 * Math.round(L.Motion.Utils.getAngle(prevPoint, nextPoint) + motionMarkerOnLine);
+							icon.style.transform = `rotate(${markerAngle}deg)`;
 						}
 					});
 				}
